@@ -11,7 +11,7 @@ content.
 On this machine, the full source knowledge currently lives at:
 
 ```
-C:\Users\Dess\Desktop\Desi-Commerce-Claude-Code-Knowledge-Handoff\desi-commerce-os\
+<LOCAL_DESI_COMMERCE_OS_PATH>
 ```
 
 **This path is machine-specific.** Do not assume it exists on another machine
