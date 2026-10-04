@@ -75,7 +75,7 @@ close the gap.
 
 - **Brand:** ELSORA — premium one-product ecommerce brand. Dropshipping is the
   launch vehicle, not the identity.
-- **Markets:** US, Canada, UK, Australia. **Fulfillment:** TeamDrop. **Platform:**
+- **Market:** United States ONLY. **Fulfillment:** TeamDrop. **Platform:**
   Shopify. **Advertising:** Meta Ads.
 - **Infrastructure status (per `90_ELSORA_MASTER_PROJECT_STATE.txt`):** Shopify
   store created, theme configured, navigation done, product page built, TeamDrop
@@ -86,10 +86,8 @@ close the gap.
   storage case with every order. No compare-at prices, no discounts.
 - **Fulfilment:** TeamDrop via agent. Bundle mapping (2 globes + 1 case per
   variant) is pending and must be done before launch.
-- **This repo's actual state:** branch `master`, 4 commits, remote
-  `github.com/desosemerdjiev-ctrl/DesiCommerce-Shopify`. The repo holds the
-  Shopify Skeleton Theme plus docs; the real theme code lives in the Shopify
-  draft theme `205328908613`.
+- **Repo:** master branch; real theme code lives in Shopify draft theme
+  205328908613 (repo = skeleton + docs).
 
 ---
 
