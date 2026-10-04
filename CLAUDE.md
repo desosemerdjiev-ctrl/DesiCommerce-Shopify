@@ -81,18 +81,15 @@ close the gap.
   store created, theme configured, navigation done, product page built, TeamDrop
   connected, fulfillment operational. Infrastructure phase is complete —
   build on it, don't redo it.
-- **Product-level specifics are undecided, not locked.** As of this handoff,
-  `90_ELSORA_MASTER_PROJECT_STATE.txt` lists product name, category, pricing,
-  COGS, margin, research findings, Meta campaign status, and creative
-  direction as `[TODO]`. This means those decisions have not been made yet —
-  it does not mean a decision exists that this file simply omits. Don't assume
-  a product has been chosen, and don't assume one hasn't been chosen more
-  recently than this file reflects — check the current state file, and if it's
-  still unclear, ask.
-- **This repo's actual state:** the Shopify codebase is currently the unmodified
-  Shopify Skeleton Theme (stock demo section on the homepage, minimal settings
-  schema) — it has not yet been customized for ELSORA. Git repo has one commit,
-  remote configured at `github.com/desosemerdjiev-ctrl/DesiCommerce-Shopify`.
+- **Product:** ELSORA stainless steel ice globes (TeamDrop SU00350697).
+  US-only. Sold as pairs only: Silver Pair $54.99, Gold Pair $57.99. Free
+  storage case with every order. No compare-at prices, no discounts.
+- **Fulfilment:** TeamDrop via agent. Bundle mapping (2 globes + 1 case per
+  variant) is pending and must be done before launch.
+- **This repo's actual state:** branch `master`, 4 commits, remote
+  `github.com/desosemerdjiev-ctrl/DesiCommerce-Shopify`. The repo holds the
+  Shopify Skeleton Theme plus docs; the real theme code lives in the Shopify
+  draft theme `205328908613`.
 
 ---
 
