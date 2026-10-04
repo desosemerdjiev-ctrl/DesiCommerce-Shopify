@@ -3,6 +3,8 @@
 This file is a **concise, persistent instruction layer** for Claude Code
 sessions in this repository (`DesiCommerce-Shopify`, the ELSORA Shopify theme).
 
+Read docs/memory/MEMORY.md and the files it references at the start of every session.
+
 **This file is not the Desi Commerce knowledge base.** It does not contain
 the full source rules, state documents, or research — it only summarizes them
 enough to orient a session and tells Claude Code where to go for the real

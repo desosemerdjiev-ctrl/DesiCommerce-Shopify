@@ -1,0 +1,8 @@
+- [ELSORA PDRN sandbox status](project_elsora_pdrn_sandbox.md) — reusable template for future stores; Jost/mobile (9-27) + offer-card hover (9-28) fixes done, still unpublished
+- [ELSORA pair-only + header polish](project_elsora_pair_only_and_polish.md) — draft theme 205328908613: 2 pair variants, marquee bar, heading shadows, tote-bag cart icon; storefront is password-protected so nothing is visually verified by Claude
+- [Text animation rendering](feedback_text_animation_rendering.md) — no transform/mask on moving text; match weight to existing page text
+- [Backup-theme diff debugging](feedback_backup_theme_diff.md) — when a CSS bug won't pin down, diff/restore from a saved backup theme instead of guessing forward
+- [Visual verification standard](feedback_visual_verification.md) — never claim a UI fix works from source-code reading alone
+- [Execute-now mode](feedback_execute_now_mode.md) — "EXECUTE NOW" means act immediately, skip re-auditing/re-confirming
+- [Direct instructions preferred](feedback_direct_instructions_preferred.md) — user writes instructions here directly now, not via ChatGPT relay
+- [Review photo framing rule](feedback_review_photo_framing.md) — review-card image slot caps at ~470px tall; source photos need real background margin, not tight selfies
