@@ -54,3 +54,10 @@ Done and approved by the user (2026-10-03):
 - Wave: hero, difference-grid, how-to-steps, elsora-wave-bg. Flat: faq-accordion, reviews-grid, proof-strip, final-cta (only when no bg image). Cart: `body.gradient` grain.
 - Settings (Theme settings → "ELSORA background finish"): `elsora_bg_grain` (default on), `elsora_bg_grain_intensity` 0–6 % (default 3), `elsora_bg_sheen` (default on). To turn the test off: untick both.
 - Not visually verified (storefront unreachable from the session).
+
+## Round 15 — mobile menu drawer restyle (draft 205328908613, 2026-10-09)
+- New snippet `snippets/elsora-menu-drawer.liquid`, rendered as the first child of `#menu-drawer` in `snippets/header-drawer.liquid` (only change in that file: one render line).
+- Active only on pdrn-sandbox / ice-globes / cart, and only at max-width 989px (desktop menu type is "dropdown", so desktop is unchanged).
+- Renders `elsora-wave-bg` inside the drawer: same wave ribbons, an aqua-only gradient (#F0F8F8 → #58E8F0 → #D0F0F8, no white top fade) and the round-14 finish layers (grain + sheen) via `--elsora-finish-wave*`.
+- Utility-links grey band made transparent. Items #0D0D0D; hover/focus = rgba(255,255,255,.32); active = 1px #706FCB underline (no grey background).
+- The header (X, logo, cart) and open/close JS/CSS are untouched. Not visually verified.
