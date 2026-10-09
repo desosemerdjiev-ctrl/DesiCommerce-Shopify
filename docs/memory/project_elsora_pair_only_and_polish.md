@@ -39,3 +39,18 @@ Done and approved by the user (2026-10-03):
 - 2026-10-09, round 10b: the user deleted 75332843635013; the new morning-ritual image is 75333096014149 (0989a466-3906-4fcd-ab4c-93ded4589d73.png). It is attached to the product (appended), has the alt "Woman using an ELSORA stainless steel ice globe on her cheek", and is position 1 in `cv_gallery_order`. Positions 2–7 are unchanged.
 - 2026-10-09, round 11 (304 copy): the cart and drawer tax line is now "Taxes calculated at checkout."; the FAQ steel answer and the benefits subtitle now say "304 stainless steel" (the FAQ adds "with a soft silicone grip"); the product description now reads "Made from durable 304 stainless steel with a soft silicone grip — …". The stats strip and eyebrow are unchanged.
 - 2026-10-09, round 12: media 75333096014149 (morning-ritual) moved to position 1 with productReorderMedia, so it is now the product's featured image. No media was deleted. The hero is unaffected because it uses `cv_gallery_order`. The product URL move (/products/ice-globes) and the catalog cleanup are only planned/listed and are waiting on the user's approval.
+- 2026-10-09, round 13 (theme part of the product URL move, NOT yet visually verified):
+  - New `templates/product.ice-globes.json` is a 1:1 copy of the sandbox page sections. It has no product setting; hero, reviews and final CTA use `section.settings.product | default: product`, so it survives a handle change.
+  - `template.suffix == 'ice-globes'` is now accepted wherever 'pdrn-sandbox' was checked (theme.liquid palette + 8 sections; header and announcement bar were already global).
+  - Product JSON-LD is output in hero-banner, on product pages only.
+  - Cart, drawer and collection links look up handle 'ice-globes' or the old handle. They point to the product page only once `product.template_suffix == 'ice-globes'`, otherwise to the sandbox page.
+  - Admin cleanup: "Gentle Hair Removal Body Mousse" archived; collections deleted: audio, construction, kitchen-dining, building-materials, clothing-accessories, household-supplies, novelty-special-use, hair-removal.
+  - Publish-day Admin steps are still pending.
+
+## Round 14 — background finish TEST (draft 205328908613, 2026-10-09)
+- New snippet `snippets/elsora-bg-finish.liquid`, rendered in theme.liquid right after elsora-design-tokens. Active only on template suffix pdrn-sandbox / ice-globes and template `cart`.
+- Grain = inline SVG feTurbulence tile (160px), soft-light blend, opacity = intensity %. Satin sheen = 115deg white gradient, peak 7%, wave backgrounds only.
+- Applied as extra background LAYERS on the section's own background (CSS vars `--elsora-finish-wave*` / `--elsora-finish-flat*`, fallback none/auto/repeat/normal) — not an overlay, so images/text/buttons/cards/cart drawer are untouched.
+- Wave: hero, difference-grid, how-to-steps, elsora-wave-bg. Flat: faq-accordion, reviews-grid, proof-strip, final-cta (only when no bg image). Cart: `body.gradient` grain.
+- Settings (Theme settings → "ELSORA background finish"): `elsora_bg_grain` (default on), `elsora_bg_grain_intensity` 0–6 % (default 3), `elsora_bg_sheen` (default on). To turn the test off: untick both.
+- Not visually verified (storefront unreachable from the session).
