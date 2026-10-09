@@ -64,3 +64,8 @@ Done and approved by the user (2026-10-03):
 - Round 15b: the drawer gradient now ends in white (#D8F8F8 92% → #FFFFFF 100%). #menu-drawer gets `overflow: visible` plus an `::after` white fade (64px) just below the panel, so there is no line where the panel ends over the page (seen in the editor's mobile preview, where the drawer is shorter than the screen). Only snippets/elsora-menu-drawer.liquid changed (md5 fb71b91b…).
 - Round 15c: removed the 64px white `::after` fade below the drawer and `overflow: visible`, because the fade covered the purple hero eyebrow. The drawer's own gradient still ends in white. The drawer style now applies on EVERY page (the template check was removed; the header is global; e.g. /pages/contact was still white). Grain/sheen inside the drawer still only appear where elsora-bg-finish is active (sandbox / ice-globes / cart). md5 5cf26ddd…
 - Round 15d: the white fade below the drawer is back but SHORT: `::after` height 22px (#FFF → rgba(255,255,255,.5) at 40% → transparent), plus `overflow: visible`. The 64px version washed out the purple eyebrow, so keep it short. md5 8e715f82…
+
+## Round 16 — FAQ "How long do they stay cold?" (draft 205328908613, 2026-10-09)
+- In templates/page.pdrn-sandbox.json (md5 72fd391a…) and templates/product.ice-globes.json (md5 3005e4e6…), block f3:
+  - Answer changed from "Chill them, roll, and pop them back in to re-chill anytime." to "Long enough for a relaxed 5-minute ritual. For a longer session, simply pop them back in the fridge or freezer for a few minutes and continue."
+  - block_order changed from f1,f2,f3,f4,f5,f6,f7 to f1,f2,f4,f5,f6,f3,f7, so the question now sits directly above "Why are there no reviews yet?".
