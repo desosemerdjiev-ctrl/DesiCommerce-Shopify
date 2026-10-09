@@ -61,3 +61,4 @@ Done and approved by the user (2026-10-03):
 - Renders `elsora-wave-bg` inside the drawer: same wave ribbons, an aqua-only gradient (#F0F8F8 → #58E8F0 → #D0F0F8, no white top fade) and the round-14 finish layers (grain + sheen) via `--elsora-finish-wave*`.
 - Utility-links grey band made transparent. Items #0D0D0D; hover/focus = rgba(255,255,255,.32); active = 1px #706FCB underline (no grey background).
 - The header (X, logo, cart) and open/close JS/CSS are untouched. Not visually verified.
+- Round 15b: the drawer gradient now ends in white (#D8F8F8 92% → #FFFFFF 100%). #menu-drawer gets `overflow: visible` plus an `::after` white fade (64px) just below the panel, so there is no line where the panel ends over the page (seen in the editor's mobile preview, where the drawer is shorter than the screen). Only snippets/elsora-menu-drawer.liquid changed (md5 fb71b91b…).
