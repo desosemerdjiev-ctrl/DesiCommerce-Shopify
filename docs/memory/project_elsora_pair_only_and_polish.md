@@ -132,3 +132,8 @@ Done and approved by the user (2026-10-03):
 - Templates:
   - page.pdrn-sandbox.json and index.json are still identical (md5 4b203ad0…).
   - product.ice-globes.json is md5 d9141a90….
+
+## Round 20 — product title (Admin, 2026-10-10)
+- Product 16150614507845 title changed from "ELSORA Ice Globes — Stainless Steel Facial Roller (Pair)" to "ELSORA Ice Globes (Pair)" (productUpdate, title only).
+- Handle, variants, prices, SKUs, description, media and product SEO (still null) are unchanged. Page SEO metafields were not touched.
+- Theme 205328908613 search (428 files): no hardcoded "Stainless Steel Facial Roller" / "Facial Roller". Cart, cart drawer, collection cards, JSON-LD and alts all read product.title / item.product.title, so they show the new title automatically.
