@@ -69,3 +69,29 @@ Done and approved by the user (2026-10-03):
 - In templates/page.pdrn-sandbox.json (md5 72fd391a…) and templates/product.ice-globes.json (md5 3005e4e6…), block f3:
   - Answer changed from "Chill them, roll, and pop them back in to re-chill anytime." to "Long enough for a relaxed 5-minute ritual. For a longer session, simply pop them back in the fridge or freezer for a few minutes and continue."
   - block_order changed from f1,f2,f3,f4,f5,f6,f7 to f1,f2,f4,f5,f6,f3,f7, so the question now sits directly above "Why are there no reviews yet?".
+
+## Round 17 — satin depth on the wave ribbons (draft 205328908613, 2026-10-10)
+- Reference image used for the surface finish only (not its colours or shapes).
+- New settings in "ELSORA background finish" (existing ones kept): `elsora_bg_satin_depth` "Satin depth" (checkbox, default on) and `elsora_bg_satin_intensity` "Satin intensity" (0–100 %, step 1, default 50).
+- snippets/elsora-bg-finish.liquid (md5 ebb03d61…):
+  - With part: 'svg', it outputs a 0×0 SVG holding filter #elsoraSatinDepth.
+    - Mask = SourceAlpha ×4, so the strength follows each ribbon's own opacity.
+    - Soft shadow under each band: blur 3, dy 4, #0A3A46 at 0.22·k.
+    - Upper-edge light: #FFF at 0.6·k.
+    - Lower-edge deeper tone: #0A3A46 at 0.18·k.
+    - k = intensity / 100.
+  - In head, it adds CSS `filter: url(#elsoraSatinDepth)` on `.elsora-wave-lines > g`, `.elsora-wave-bg__lines > g`, `[class*="cv-diff-wave-lines-"] > g` and `[class*="cv-howto-wave-lines-"] > g`.
+  - Same gating as the rest of the finish: sandbox / ice-globes / cart, including the mobile menu on those pages.
+- layout/theme.liquid (md5 10aa3a46…): `{% render 'elsora-bg-finish', part: 'svg' %}` right after `<body>`.
+- config/settings_schema.json (md5 929ac7f8…).
+- Wave shapes, positions, colours and the sections themselves are unchanged. Grain is unchanged (still governed by "Background grain intensity"). Not visually verified.
+- Round 17b fix: the user reported that the waves looked zoomed and thicker, worst on mobile.
+  - Geometry was never changed: the hero, difference-grid, how-to-steps, elsora-wave-bg and menu-drawer md5s are identical to pre-17.
+  - Cause: the satin filter's drop shadow (blur 3 + dy 4 user units, mask ×4) spread outside every band. The mobile viewBox 400×1200 is stretched about 2× vertically, which doubled the effect.
+  - Fix in elsora-bg-finish.liquid (md5 40dad5d6…): the shadow is now `feComposite in="shadowfull" in2="m" operator="in"`, so every filter layer stays inside the original band edges. Light, deep tone and grain are unchanged. Lesson: SVG filter effects on the wave ribbons must never paint outside the band shape.
+- Round 17c: the user said the waves must look EXACTLY as before the SVG filter.
+  - Before the filter, the top bands faded in from the white top and different sections showed different band sizes. With the filter, the bands ran edge to edge and looked stretched.
+  - Cause: the filter's darker tone (#0A3A46) and shadow make the white-on-white bands visible. Any darkening filter changes the look, even with the 17b clipping.
+  - Fix: in config/settings_schema.json (md5 784be921…), `elsora_bg_satin_depth` now defaults to false. settings_data was never saved, so the default applies and the filter is not output, giving exactly the pre-17 waves (round-14 grain + sheen kept).
+  - The settings "Satin depth" and "Satin intensity" remain. Switching Satin depth on brings the filter back, with the same look change.
+  - Lesson: do not add darkening layers on the wave ribbons.
