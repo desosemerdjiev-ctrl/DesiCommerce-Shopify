@@ -126,3 +126,9 @@ Done and approved by the user (2026-10-03):
   - Card title is now 12px (was 12.5) with min-height 2.5em (2 lines reserved in both cards), so title / Pair / price line up.
   - Measured: "Premium Gold Pair" needs about 101px at 12px, while the text space is 78–93px on 360–390px phones, so one line is not possible there.
   - Desktop untouched.
+
+## Round 19 — proof strip middle stat (draft 205328908613, 2026-10-10)
+- In the proof_strip stat_2 block, "number" changed from "Durable" to "304". The label "stainless steel" is unchanged (shown uppercase by CSS).
+- Templates:
+  - page.pdrn-sandbox.json and index.json are still identical (md5 4b203ad0…).
+  - product.ice-globes.json is md5 d9141a90….
