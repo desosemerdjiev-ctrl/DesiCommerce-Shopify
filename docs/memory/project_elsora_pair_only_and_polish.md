@@ -95,3 +95,29 @@ Done and approved by the user (2026-10-03):
   - Fix: in config/settings_schema.json (md5 784be921…), `elsora_bg_satin_depth` now defaults to false. settings_data was never saved, so the default applies and the filter is not output, giving exactly the pre-17 waves (round-14 grain + sheen kept).
   - The settings "Satin depth" and "Satin intensity" remain. Switching Satin depth on brings the filter back, with the same look change.
   - Lesson: do not add darkening layers on the wave ribbons.
+
+## Round 18 — audit fixes (draft 205328908613, 2026-10-10)
+- Homepage:
+  - templates/index.json is now a byte-for-byte copy of templates/page.pdrn-sandbox.json (md5 72fd391a…). Old index (md5 ef35bbe5…) was the hair-removal content; a copy still exists in the backup themes.
+  - `or template.name == 'index'` was added to the template checks in: theme.liquid (palette; the header comment was updated too), hero-banner, faq-accordion, reviews-grid, difference-grid, lifestyle-row, how-to-steps, proof-strip, footer and elsora-bg-finish. The mobile menu was already global.
+  - Publish-day note: the hero/reviews/final-cta `product` settings in index.json and the sandbox template reference the product handle. If the handle changes to ice-globes, re-check them.
+- Hero gallery: the main image srcset is now 600/800/1000/1200/1400w (sizes unchanged). Thumbs carry `data-srcset` with the same widths (`data-full-2x` with its 2000px 2x was replaced), and the JS sets `mainImg.srcset` from it. Thumbnails stay at 150px.
+- Variant URL: an offer-card click does `history.replaceState` with `?variant=<id>` (in try/catch).
+- Thumbnail img alt is now `media.alt | default: product.title`.
+- Mobile:
+  - `.cv-trust-dot` is hidden at max-width 749px.
+  - At ≤900px the offer card padding changed from 10px 8px to 10px 12px, and the title wraps (white-space normal, line-height 1.25) instead of hitting the edge.
+- md5s:
+
+| File | md5 |
+|---|---|
+| theme.liquid | f728842c… |
+| hero | 87324e3f… |
+| faq | 4d2ad39d… |
+| reviews | 383c9ed4… |
+| difference | e72be2bf… |
+| lifestyle | 15d0bf66… |
+| how-to | 5fe3a616… |
+| proof-strip | d69ecf66… |
+| footer | 2cf50a4a… |
+| bg-finish | a549b632… |
