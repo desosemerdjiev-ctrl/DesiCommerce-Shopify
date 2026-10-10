@@ -121,3 +121,8 @@ Done and approved by the user (2026-10-03):
 | proof-strip | d69ecf66… |
 | footer | 2cf50a4a… |
 | bg-finish | a549b632… |
+- Round 18b (mobile ≤900px only, hero-banner md5 40cc4e56…):
+  - Offer card padding changed from 10px 12px to 16px 12px 10px in BOTH cards, so the "Our Pick" badge (top −9px) has clear space above the title.
+  - Card title is now 12px (was 12.5) with min-height 2.5em (2 lines reserved in both cards), so title / Pair / price line up.
+  - Measured: "Premium Gold Pair" needs about 101px at 12px, while the text space is 78–93px on 360–390px phones, so one line is not possible there.
+  - Desktop untouched.
