@@ -147,3 +147,13 @@ Done and approved by the user (2026-10-03):
   - New block f8 "What's inside the globes?" — "Each globe is made of 304 stainless steel with a sealed cooling liquid inside. It's fully enclosed — nothing to refill, nothing to leak."
   - block_order is now f1,f2,f4,f5,f6,f3,f8,f7.
   - Applies to page.pdrn-sandbox.json and index.json (identical, md5 28b00749…) and product.ice-globes.json (md5 9a99acd8…).
+
+## Round 22 — gallery image 6 replaced (2026-10-13)
+- The new "CRAFTED TO LAST" image ("Soft silicone grip") was found in Files (MediaImage 75415222911301, uploaded 2026-10-13 11:10 UTC, 1122×1402); it was not yet on the product.
+  - Attached with fileUpdate referencesToAdd and alt "ELSORA ice globe — 304 stainless steel, sealed cooling core, soft silicone grip".
+  - Featured image is unchanged (75333096014149).
+- hero-banner.liquid (md5 d7c2dd9f…):
+  - cv_gallery_order position 6 changed from 75084847153477 to 75415222911301.
+  - 75084847153477 (old crafted-to-last) was added to cv_hidden_media. It stays on the product.
+  - Gallery now: 75333096014149, 75332834951493, 75084847055173, 75084847087941, 75084847120709, 75415222911301, 75332405625157.
+- Could not view the image (cdn blocked); identified as the only new upload of the day.
