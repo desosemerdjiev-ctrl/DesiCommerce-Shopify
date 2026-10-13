@@ -157,3 +157,12 @@ Done and approved by the user (2026-10-03):
   - 75084847153477 (old crafted-to-last) was added to cv_hidden_media. It stays on the product.
   - Gallery now: 75333096014149, 75332834951493, 75084847055173, 75084847087941, 75084847120709, 75415222911301, 75332405625157.
 - Could not view the image (cdn blocked); identified as the only new upload of the day.
+
+## Round 23 — review promise line (2026-10-13)
+- reviews-grid setting `review_promise_line`:
+  - Old: "Our review promise: every review on this page will come from a real customer, collected after delivery. We publish them all — never edited, never hidden."
+  - New: "Every review on this page comes from a verified customer. We never write, buy or edit reviews."
+- Templates:
+  - page.pdrn-sandbox.json and index.json are still identical (md5 a21a2e58…).
+  - product.ice-globes.json is md5 2066974e….
+- The section schema default (reviews-grid.liquid) is unchanged.
