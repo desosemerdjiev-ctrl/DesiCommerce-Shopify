@@ -176,3 +176,9 @@ Done and approved by the user (2026-10-03):
 - sections/contact-form.liquid (md5 fd4b0239…): "We reply within 24 hours" changed to "We reply within 24 business hours".
 - sections/footer-group.json (md5 e3db7d77…): "Customer support replies within 24 hours." changed to "Customer support replies within 24 business hours."
 - Contact and footer are global. No other "24 hours" text exists in the theme, except unused CloudVeil schema defaults and the old product.json.
+
+## Round 25 — delivery time wording (2026-10-13)
+- Hero shipping_desc_3 changed from "Fast processing — then 5–8 days to your door" to "Fast processing — then 5–8 business days to your door", to match the Shipping policy.
+- Templates:
+  - page.pdrn-sandbox.json and index.json are identical (md5 ecf883a4…).
+  - product.ice-globes.json is md5 9492703c….
