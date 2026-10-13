@@ -137,3 +137,13 @@ Done and approved by the user (2026-10-03):
 - Product 16150614507845 title changed from "ELSORA Ice Globes — Stainless Steel Facial Roller (Pair)" to "ELSORA Ice Globes (Pair)" (productUpdate, title only).
 - Handle, variants, prices, SKUs, description, media and product SEO (still null) are unchanged. Page SEO metafields were not touched.
 - Theme 205328908613 search (428 files): no hardcoded "Stainless Steel Facial Roller" / "Facial Roller". Cart, cart drawer, collection cards, JSON-LD and alts all read product.title / item.product.title, so they show the new title automatically.
+
+## Round 21 — supplier-confirmed facts (2026-10-13)
+- Supplier confirmed: 304 stainless steel globes with a sealed cooling liquid inside. Never claim a specific cold-holding time.
+- Product description (Admin), third paragraph:
+  - Old: "Made from durable 304 stainless steel with a soft silicone grip — smooth, hygienic…"
+  - New: "Made from durable 304 stainless steel with a soft silicone grip and a sealed cooling-liquid core that helps hold the cold — smooth, hygienic…" (the requested period was not added, so the existing em-dash clause continues the sentence).
+- FAQ:
+  - New block f8 "What's inside the globes?" — "Each globe is made of 304 stainless steel with a sealed cooling liquid inside. It's fully enclosed — nothing to refill, nothing to leak."
+  - block_order is now f1,f2,f4,f5,f6,f3,f8,f7.
+  - Applies to page.pdrn-sandbox.json and index.json (identical, md5 28b00749…) and product.ice-globes.json (md5 9a99acd8…).
