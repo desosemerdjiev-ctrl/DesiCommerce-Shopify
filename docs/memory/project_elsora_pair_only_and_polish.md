@@ -166,3 +166,13 @@ Done and approved by the user (2026-10-03):
   - page.pdrn-sandbox.json and index.json are still identical (md5 a21a2e58…).
   - product.ice-globes.json is md5 2066974e….
 - The section schema default (reviews-grid.liquid) is unchanged.
+
+## Round 24 — audit text fixes (2026-10-13)
+- Templates. page.pdrn-sandbox.json and index.json are identical (md5 18c93e8d…); product.ice-globes.json is md5 697671bd…. In each:
+  - FAQ f1: appended " For a warm ritual, place them in warm (not boiling) water for a few minutes. Never microwave or heat directly."
+  - FAQ f8: "It's fully enclosed — nothing to refill, nothing to leak." changed to "It's fully sealed — nothing to refill."
+  - reviews-grid promise_text_1: "Freezer-safe, holds two globes." changed to "Holds both globes, clean and ready."
+  - proof strip stat_4 label: "day money-back guarantee" now uses a non-breaking hyphen (U+2011): "day money‑back guarantee".
+- sections/contact-form.liquid (md5 fd4b0239…): "We reply within 24 hours" changed to "We reply within 24 business hours".
+- sections/footer-group.json (md5 e3db7d77…): "Customer support replies within 24 hours." changed to "Customer support replies within 24 business hours."
+- Contact and footer are global. No other "24 hours" text exists in the theme, except unused CloudVeil schema defaults and the old product.json.
