@@ -236,3 +236,9 @@ Done and approved by the user (2026-10-03):
   - All video-support code stays, so a future 4:5 video only needs its ID added back.
   - The video stays in the product media.
 - Repo now holds a full backup of theme 205328908613 (428 files, md5-verified against Shopify). The 17 leftover skeleton files (blocks/*, skeleton sections/snippets, assets/critical.css, shoppy-x-ray.svg) were deleted.
+- Round 33 (labels, hero md5 d27b8528…):
+  - "Just launched" badge: 8.5px → 11px (all sizes).
+  - "Our Pick" badge: 8.5px → 11px (all sizes).
+  - Mobile "Pair" tier: 9.5px → 11px (desktop was already 11px).
+  - Measured at 375px: the Our Pick badge is 77px on a 164px card (still centered, top −9px), and Pair is 29px in an 86px column.
+  - Both cards grow equally by about 2px (86.7 → 88.5px).
