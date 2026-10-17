@@ -1,0 +1,245 @@
+{%- comment -%}
+  ELSORA collection page (e.g. /collections/all): same wave background as /cart
+  (snippets/elsora-wave-bg.liquid), ELSORA-font title with the heading shadow and
+  one ELSORA card per product. No filter / sort bar. The ice globes product is
+  shown as TWO cards, one per variant, like the store selector: Silver Pair
+  (elsora-ref-silver-pair.webp) and Premium Gold Pair (elsora-ref-gold-pair.webp, "Our
+  Pick" badge), each with its live variant price. Each card links to the ice
+  globes page (PDRN sandbox page) with ?variant=<id>; the hero there preselects
+  that card. Presentation only: it stays one product with two variants.
+  Used by templates/collection.json.
+{%- endcomment -%}
+{% render 'elsora-wave-bg' %}
+
+<div class="elsora-collection">
+  <div class="elsora-collection__inner">
+    <h1 class="elsora-collection__title">{%- if collection.handle == 'all' -%}Shop ELSORA Ice Globes{%- else -%}{{ collection.title | escape }}{%- endif -%}</h1>
+
+    {%- paginate collection.products by 12 -%}
+      {%- if collection.products.size > 0 -%}
+        <ul class="elsora-collection__grid" role="list">
+          {%- for product in collection.products -%}
+            {%- if product.id == 16150614507845 -%}
+              {%- liquid
+                assign pair_page_url = product.url
+                assign elsora_page = pages['elsora-sandbox-pdrn-template-test']
+                if elsora_page != blank and product.template_suffix != 'ice-globes'
+                  assign pair_page_url = elsora_page.url
+                endif
+              -%}
+              {%- for variant in product.variants -%}
+                {%- liquid
+                  assign pair_name = blank
+                  if variant.id == 59209490235717
+                    assign pair_name = 'Silver Pair'
+                    assign pair_image_name = 'elsora-ref-silver-pair.webp'
+                    assign pair_pick = false
+                  elsif variant.id == 59209490268485
+                    assign pair_name = 'Premium Gold Pair'
+                    assign pair_image_name = 'elsora-ref-gold-pair.webp'
+                    assign pair_pick = true
+                  endif
+                  assign pair_image = variant.featured_media | default: product.featured_media
+                  if images[pair_image_name] != blank
+                    assign pair_image = images[pair_image_name]
+                  endif
+                -%}
+                {%- if pair_name != blank -%}
+                  <li class="elsora-collection__item">
+                    <a href="{{ pair_page_url }}?variant={{ variant.id }}" class="elsora-collection__card">
+                      {%- if pair_pick -%}
+                        <span class="elsora-collection__badge">Our Pick</span>
+                      {%- endif -%}
+                      <span class="elsora-collection__media">
+                        {%- if pair_image != blank -%}
+                          {{
+                            pair_image
+                            | image_url: width: 900
+                            | image_tag:
+                              loading: 'lazy',
+                              widths: '300, 450, 600, 900',
+                              sizes: '(min-width: 750px) 360px, calc(100vw - 64px)',
+                              alt: pair_name
+                          }}
+                        {%- endif -%}
+                      </span>
+                      <span class="elsora-collection__name">{{ pair_name }}</span>
+                      <span class="elsora-collection__price">{{ variant.price | money }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- liquid
+              assign card_url = product.url
+              assign card_image = product.featured_media
+            -%}
+            <li class="elsora-collection__item">
+              <a href="{{ card_url }}" class="elsora-collection__card">
+                <span class="elsora-collection__media">
+                  {%- if card_image != blank -%}
+                    {{
+                      card_image
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '300, 450, 600, 900',
+                        sizes: '(min-width: 750px) 360px, calc(100vw - 64px)',
+                        alt: product.title
+                    }}
+                  {%- endif -%}
+                </span>
+                <span class="elsora-collection__name">{{ product.title | escape }}</span>
+                <span class="elsora-collection__price">
+                  {%- if product.price_varies -%}
+                    From {{ product.price_min | money }}
+                  {%- else -%}
+                    {{ product.price | money }}
+                  {%- endif -%}
+                </span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- if paginate.pages > 1 -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      {%- else -%}
+        <p class="elsora-collection__empty">{{ 'sections.collection_template.empty' | t }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+<style>
+  #MainContent {
+    position: relative;
+    isolation: isolate;
+    min-height: 72vh;
+  }
+  .elsora-collection {
+    font-family: var(--elsora-font-body);
+    color: var(--elsora-plum);
+    padding: 56px 0 72px;
+  }
+  .elsora-collection__inner {
+    max-width: var(--elsora-container-max);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .elsora-collection__title {
+    font-family: var(--elsora-font-display);
+    font-weight: 500;
+    font-size: clamp(32px, 3.6vw, 46px);
+    line-height: 1.15;
+    letter-spacing: 0;
+    color: var(--elsora-plum);
+    text-shadow: var(--elsora-text-shadow-3d);
+    text-align: center;
+    margin: 0 0 40px;
+  }
+  .elsora-collection__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
+    justify-content: center;
+    gap: 28px;
+  }
+  .elsora-collection__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: var(--elsora-radius);
+    box-shadow: var(--elsora-shadow-soft);
+    padding: 18px 18px 22px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s ease, box-shadow .25s ease;
+  }
+  .elsora-collection__card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--elsora-shadow-image);
+  }
+  .elsora-collection__badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    background: #E5E5F6;
+    color: var(--elsora-label-ink);
+    font-family: var(--elsora-font-body);
+    font-size: 10.5px;
+    font-weight: 400;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 3px 12px;
+    border-radius: 20px;
+  }
+  .elsora-collection__media {
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #FFFFFF;
+    margin-bottom: 16px;
+  }
+  .elsora-collection__media img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .elsora-collection__name {
+    font-family: var(--elsora-font-display);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--elsora-plum);
+    text-align: center;
+  }
+  .elsora-collection__price {
+    margin-top: 8px;
+    font-family: var(--elsora-font-body);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    color: #706FCB;
+    text-align: center;
+  }
+  .elsora-collection__empty {
+    text-align: center;
+    color: var(--elsora-plum-soft);
+  }
+
+  @media screen and (max-width: 749px) {
+    .elsora-collection {
+      padding: 36px 0 52px;
+    }
+    .elsora-collection__inner {
+      padding: 0 16px;
+    }
+    .elsora-collection__title {
+      margin-bottom: 26px;
+    }
+    .elsora-collection__grid {
+      grid-template-columns: minmax(0, 360px);
+      gap: 26px;
+    }
+    .elsora-collection__card {
+      padding: 14px 14px 18px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ELSORA collection",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,132 @@
+{% assign sid = section.id %}
+{%- assign is_pdrn_sandbox = false -%}
+{%- if template.suffix == 'pdrn-sandbox' or template.suffix == 'ice-globes' or template.name == 'index' -%}
+  {%- assign is_pdrn_sandbox = true -%}
+{%- endif -%}
+
+<div class="cv-faq-{{ sid }}" id="faq">
+  <div class="cv-faq__head-{{ sid }}">
+    {% if section.settings.label != blank %}
+      <div class="cv-section-label-{{ sid }}">{{ section.settings.label }}</div>
+    {% endif %}
+    <h2>{{ section.settings.headline }}</h2>
+  </div>
+  {% for block in section.blocks %}
+    <div class="cv-faq__item-{{ sid }}{% if forloop.first %} cv-faq__item--open-{{ sid }}{% endif %}" {% if block.settings.hide_when_reviews_exist %}id="cv-loox-no-reviews-faq" {% endif %}{{ block.shopify_attributes }}>
+      <button type="button" class="cv-faq__q-{{ sid }}">
+        <span>{{ block.settings.question }}</span>
+        <span class="cv-plus-{{ sid }}">+</span>
+      </button>
+      <div class="cv-faq__a-{{ sid }}"><p>{{ block.settings.answer }}</p></div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  (function () {
+    var root = document.currentScript.previousElementSibling;
+    if (!root) return;
+    var items = root.querySelectorAll('.cv-faq__item-{{ sid }}');
+    items.forEach(function (item) {
+      var trigger = item.querySelector('.cv-faq__q-{{ sid }}');
+      if (!trigger) return;
+      trigger.addEventListener('click', function () {
+        var wasOpen = item.classList.contains('cv-faq__item--open-{{ sid }}');
+        items.forEach(function (i) { i.classList.remove('cv-faq__item--open-{{ sid }}'); });
+        if (!wasOpen) item.classList.add('cv-faq__item--open-{{ sid }}');
+      });
+    });
+  })();
+</script>
+
+{% style %}
+  .cv-faq-{{ sid }} {
+    --cv-plum: var(--elsora-plum);
+    --cv-plum-soft: var(--elsora-plum-soft);
+    --cv-rose-deep: var(--elsora-rose-deep);
+    --cv-line: var(--elsora-line);
+
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 64px 32px;
+    font-family: var(--elsora-font-body);
+    color: var(--cv-plum);
+    box-sizing: border-box;
+  }
+  .cv-faq-{{ sid }} *, .cv-faq-{{ sid }} *::before, .cv-faq-{{ sid }} *::after { box-sizing: border-box; }
+
+  @media (max-width: 760px) { .cv-faq-{{ sid }} { padding: 48px 20px; } }
+
+  {%- if is_pdrn_sandbox -%}
+    .shopify-section:has(.cv-faq-{{ sid }}) {
+      background: #C7EFE0;
+      background: var(--elsora-finish-flat, none), linear-gradient(
+        180deg,
+        #FFFFFF 0%, #C7EFE0 15%, #C7EFE0 85%, #FFFFFF 100%
+      );
+      background-size: var(--elsora-finish-flat-size, auto);
+      background-repeat: var(--elsora-finish-flat-repeat, repeat);
+      background-blend-mode: var(--elsora-finish-flat-blend, normal);
+    }
+  {%- endif -%}
+
+  .cv-faq__head-{{ sid }} { text-align: center; margin-bottom: 48px; }
+  .cv-faq__head-{{ sid }} .cv-section-label-{{ sid }} {
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #706FCB; margin-bottom: 14px;
+  }
+  .cv-faq__head-{{ sid }} h2 {
+    font-family: var(--elsora-font-display); font-size: clamp(28px, 3.4vw, 40px); font-weight: 400; margin: 0;
+    color: var(--cv-plum);
+  }
+
+  .cv-faq__item-{{ sid }} { border-bottom: 1px solid var(--cv-line); }
+  .cv-faq__item-{{ sid }}[hidden] { display: none !important; }
+  .cv-faq__q-{{ sid }} {
+    width: 100%; background: none; border: none; cursor: pointer;
+    padding: 22px 4px; display: flex; justify-content: space-between; align-items: center;
+    font-size: 15.5px; font-weight: 400; font-family: var(--elsora-font-body); color: var(--cv-plum);
+    text-align: left;
+  }
+  .cv-faq__q-{{ sid }} .cv-plus-{{ sid }} {
+    font-family: var(--elsora-font-display); font-size: 20px; color: var(--cv-rose-deep);
+    transition: transform .2s; flex-shrink: 0; margin-left: 12px;
+  }
+  .cv-faq__item--open-{{ sid }} .cv-plus-{{ sid }} { transform: rotate(45deg); }
+
+  .cv-faq__a-{{ sid }} { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+  .cv-faq__item--open-{{ sid }} .cv-faq__a-{{ sid }} { max-height: 400px; }
+  .cv-faq__a-{{ sid }} p { padding: 0 4px 22px; font-size: 14.5px; color: var(--cv-plum-soft); line-height: 1.7; margin: 0; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "CV FAQ Accordion",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Eyebrow label", "default": "Questions" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Frequently asked" }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "textarea", "id": "answer", "label": "Answer" },
+        { "type": "checkbox", "id": "hide_when_reviews_exist", "label": "Hide automatically once real Loox reviews exist", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CV FAQ Accordion",
+      "blocks": [
+        { "type": "faq", "settings": { "question": "How do I use CloudVeil?", "answer": "Spray evenly onto clean, dry skin. Leave it on for a few minutes, then gently wipe away and rinse thoroughly with water. Always follow the directions on the packaging." } },
+        { "type": "faq", "settings": { "question": "Do I need to spread it with my hands?", "answer": "No. CloudVeil is a spray-on mousse, so you apply it directly to skin — no hand-spreading, no sticky residue." } },
+        { "type": "faq", "settings": { "question": "Where can I use it?", "answer": "Legs, arms, underarms and bikini line. Avoid broken, irritated, sunburned or freshly shaved skin." } },
+        { "type": "faq", "settings": { "question": "Is it safe for sensitive or intimate areas?", "answer": "CloudVeil is designed to be gentle for delicate areas like the bikini line. Avoid internal or mucosal areas and always patch test 24 hours before first use." } },
+        { "type": "faq", "settings": { "question": "Is it suitable for men and women?", "answer": "Yes — CloudVeil is formulated for both women and men as part of a simple body hair removal routine." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

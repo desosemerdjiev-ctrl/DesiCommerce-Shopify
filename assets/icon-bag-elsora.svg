@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 24" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="elsora-bag-fill" x1="15" y1="8.6" x2="15" y2="19.7" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EAF9F8"/>
+      <stop offset="55%" stop-color="#6ED7DC"/>
+      <stop offset="100%" stop-color="#25BBC6"/>
+    </linearGradient>
+    <radialGradient id="elsora-bag-sheen" cx="15" cy="12" r="8" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="elsora-bag-clip">
+      <path d="M3.8,8.6 H26.2 L25,16.8 A3,3 0 0 1 22,19.7 H8 A3,3 0 0 1 5,16.8 Z"/>
+    </clipPath>
+  </defs>
+
+  <path d="M11,8.8 C11,4.9 19,4.9 19,8.8" stroke="#168894" stroke-width="0.7" stroke-linecap="round" opacity="0.55"/>
+  <path d="M8.6,8.8 C8.6,2.6 21.4,2.6 21.4,8.8" stroke="#9F9DF5" stroke-width="1" stroke-linecap="round"/>
+
+  <path d="M3.8,8.6 H26.2 L25,16.8 A3,3 0 0 1 22,19.7 H8 A3,3 0 0 1 5,16.8 Z" fill="url(#elsora-bag-fill)"/>
+
+  <g clip-path="url(#elsora-bag-clip)">
+    <rect x="3" y="8" width="24" height="2.4" fill="#9F9DF5"/>
+    <rect x="3" y="10.4" width="24" height="10" fill="url(#elsora-bag-sheen)"/>
+    <path class="elsora-bag-wave elsora-bag-wave--back" d="M0,15.7 C2.8 13 5 17.9 7 15.7 C9 13.5 11.2 18.4 14 15.7 C16.8 13 19 17.9 21 15.7 C23 13.5 25.2 18.4 28 15.7 C30.8 13 33 17.9 35 15.7 C37 13.5 39.2 18.4 42 15.7 C44.8 13 47 17.9 49 15.7 C51 13.5 53.2 18.4 56 15.7 L56,21 L0,21 Z" fill="#C7EFE0" opacity="0.55"/>
+    <path class="elsora-bag-wave elsora-bag-wave--front" d="M0,15.2 C2.3 12.4 5.2 18 7 15.2 C8.8 12.4 11.7 18 14 15.2 C16.3 12.4 19.2 18 21 15.2 C22.8 12.4 25.7 18 28 15.2 C30.3 12.4 33.2 18 35 15.2 C36.8 12.4 39.7 18 42 15.2 C44.3 12.4 47.2 18 49 15.2 C50.8 12.4 53.7 18 56 15.2 L56,21 L0,21 Z" fill="#C7EFE0" opacity="1"/>
+    <path class="elsora-bag-wave elsora-bag-wave--front" d="M0,15.2 C2.3 12.4 5.2 18 7 15.2 C8.8 12.4 11.7 18 14 15.2 C16.3 12.4 19.2 18 21 15.2 C22.8 12.4 25.7 18 28 15.2 C30.3 12.4 33.2 18 35 15.2 C36.8 12.4 39.7 18 42 15.2 C44.3 12.4 47.2 18 49 15.2 C50.8 12.4 53.7 18 56 15.2" stroke="#FFFFFF" stroke-width="0.35" stroke-linecap="round" opacity="0.8"/>
+  </g>
+
+  <path d="M4.3,10.4 H25.7" stroke="#168894" stroke-width="0.4" stroke-linecap="round" opacity="0.5"/>
+
+  <path d="M3.8,8.6 H26.2 L25,16.8 A3,3 0 0 1 22,19.7 H8 A3,3 0 0 1 5,16.8 Z" stroke="#9F9DF5" stroke-width="0.5" stroke-linejoin="round"/>
+
+  <style>
+    #cart-icon-bubble { width: 5.5rem; }
+    #cart-icon-bubble .svg-wrapper { width: 55px; }
+    #cart-icon-bubble .svg-wrapper > svg { transition: transform 0.3s ease; }
+    #cart-icon-bubble:hover .svg-wrapper > svg { transform: translateY(-1px) scale(1.05); }
+    #cart-icon-bubble .cart-count-bubble { left: 3.7rem; bottom: 2.2rem; width: 1.8rem; height: 1.8rem; background: #706FCB; color: #FFFFFF; font-size: 1rem; font-weight: 500; box-shadow: 0 0 0 1.5px #FFFFFF, 0 3px 7px rgba(13, 13, 13, 0.3); }
+    .elsora-bag-wave--front { animation: elsora-bag-drift 5s linear infinite; }
+    .elsora-bag-wave--back { animation: elsora-bag-drift 3.5s linear infinite reverse; }
+    @keyframes elsora-bag-drift { from { transform: translateX(0); } to { transform: translateX(-14px); } }
+    @media (prefers-reduced-motion: reduce) { .elsora-bag-wave { animation: none !important; } #cart-icon-bubble .svg-wrapper > svg { transition: none; } }
+  </style>
+</svg>

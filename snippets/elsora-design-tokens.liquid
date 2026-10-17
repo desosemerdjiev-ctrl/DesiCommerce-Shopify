@@ -1,0 +1,318 @@
+{% comment %}
+  ELSORA DESIGN TOKENS — single source of truth for the 9 ELSORA product-page
+  sections, the elsora-wave-divider component, the shared footer gradient,
+  and (on the PDRN sandbox only) the header cart-icon tint.
+
+  Rendered once from layout/theme.liquid, which passes an `active_palette`
+  parameter that is 'current' for every page EXCEPT the PDRN sandbox
+  template, which requests 'ice-globes' for itself.
+
+  FINAL REFERENCE-MATCH CORRECTION: rebuilt from the Chief of Operations'
+  exact reference family (soft silver #F3F6F6, cool light grey #DDE8E8,
+  very light aqua #D8F0F1, soft aqua #BFE5E8, premium turquoise #35B9C5,
+  stronger turquoise #20AEBB, deep accent #168F9B used sparingly, near-
+  white #FAFCFC). Explicitly moving away from the greener/darker teal
+  values used in prior passes (#159B96, #008F9A, #005A63) per direct
+  feedback that those read as "medical/petroleum teal" rather than true
+  aqua-leaning turquoise.
+
+  WAVE-ONLY TOKENS (ice_wave_1/2/3 below): dedicated color slots used
+  exclusively by sections/elsora-wave-divider.liquid's three fill layers.
+  Kept deliberately separate from --elsora-cream-deep/--elsora-tint/
+  --elsora-rose (which are shared by the hero background, shipping cards,
+  etc.) specifically so a wave-only color correction never ripples into
+  those other components. ice_wave_1 (lowest/base layer) is now a clearly
+  saturated icy blue — intentionally DIFFERENT from ice_cta (the CTA
+  button's own dedicated token, still #706FCB) per explicit instruction
+  that the wave base must read as blue, not purple, while every other
+  purple usage on the page (CTA, eyebrows, section labels, benefit-card
+  icons/headings, review avatars/stars) stays untouched.
+
+  TYPOGRAPHY: --elsora-font-display and --elsora-font-body both use the
+  system stack "Helvetica Neue", Helvetica, Arial, sans-serif (no web font is
+  loaded; this matches the approved theme-editor look). Jost was removed. Normal-cut headings/body/UI text
+  must stay within 300/400/500 — those are the only cuts most components
+  are styled for. A single explicit exception: weight 200 is also used
+  (normal style only) for the hero price row ($ symbol, current price,
+  struck-through compare price in sections/hero-banner.liquid) per direct
+  instruction to push that one element as thin/premium as possible beyond
+  what 300 gave visually. Do not spread weight 200 to any other component
+  without a similar explicit request.
+
+  ICE-GLOBES TEXT COLOR (premium black pass): ice_plum changed from the
+  near-black navy #172333 to a true rich black #0D0D0D per explicit
+  instruction that all black/near-black text (headings + body) read as
+  a deliberate premium black rather than a tinted navy. ice_plum_soft
+  (secondary/description gray) and ice_label_ink (badge text) were left
+  untouched — neither qualifies as "black or near-black", and badges were
+  explicitly excluded from the color pass.
+
+  HEADING SHADOW (sandbox only): --elsora-text-shadow-3d (headings) and
+  --elsora-text-shadow-3d-sm (hero price) are plain, soft dark drop shadows
+  (no light highlight / emboss edge, darkness kept light on purpose — the
+  saturated pure black is reserved for the announcement bar only).
+  --elsora-text-shadow-3d-footer is a slightly stronger version used ONLY
+  for the footer newsletter heading (it sits on the darker teal footer
+  gradient where the normal shadow is barely visible). They are applied by
+  the ice-globes-only rule block at the bottom of this snippet, to the hero
+  title + price, the five section headings (not the final CTA) and the
+  footer newsletter heading.
+{% endcomment %}
+
+{% comment %} ============ ACTIVE PALETTE ============ {% endcomment %}
+{% assign elsora_active_palette = active_palette | default: 'current' %}
+
+{% comment %} ============ PALETTE: CURRENT (production-approved baseline) ============ {% endcomment %}
+{% assign cur_cream               = '#FBF4EF' %}
+{% assign cur_cream_deep          = '#F3E7DD' %}
+{% assign cur_plum                = '#2E2024' %}
+{% assign cur_plum_soft           = '#5C474C' %}
+{% assign cur_rose                = '#C97B84' %}
+{% assign cur_rose_deep           = '#A85D67' %}
+{% assign cur_gold                = '#C9A05C' %}
+{% assign cur_sage                = '#9CAE8C' %}
+{% assign cur_line                = 'rgba(46, 32, 36, 0.12)' %}
+{% assign cur_tint                = '#EDE3F7' %}
+{% assign cur_tint_alt            = cur_cream_deep %}
+{% assign cur_accent              = '#9B6FD9' %}
+{% assign cur_cta                 = '#9B7CF6' %}
+{% assign cur_difference_tint     = '#F4E8F7' %}
+{% assign cur_bridge_accent       = '#A56BEB' %}
+{% assign cur_bridge_accent_deep  = '#8D63D8' %}
+{% assign cur_surface_white       = '#FFFFFF' %}
+{% assign cur_label_ink           = '#1A1A1A' %}
+{% assign cur_radius              = '2px' %}
+{% assign cur_footer_grad_1       = '#eadcff' %}
+{% assign cur_footer_grad_2       = '#c9a0ff' %}
+{% assign cur_footer_grad_3       = '#8b4dff' %}
+{% assign cur_footer_accent       = '#a66cff' %}
+
+{% comment %} ============ PALETTE: PDRN-SANDBOX v5 (preserved, no longer routed to) ============ {% endcomment %}
+{% assign pdrn_cream               = '#FBF1E9' %}
+{% assign pdrn_cream_deep          = '#F5DCE2' %}
+{% assign pdrn_plum                = cur_plum %}
+{% assign pdrn_plum_soft           = cur_plum_soft %}
+{% assign pdrn_rose                = '#E17DA0' %}
+{% assign pdrn_rose_deep           = '#9E3B5C' %}
+{% assign pdrn_gold                = cur_gold %}
+{% assign pdrn_sage                = cur_sage %}
+{% assign pdrn_line                = 'rgba(158, 59, 92, 0.2)' %}
+{% assign pdrn_tint                = '#ECA9C5' %}
+{% assign pdrn_tint_alt            = '#F3E6D9' %}
+{% assign pdrn_accent              = '#B93A61' %}
+{% assign pdrn_cta                 = '#9E3B5C' %}
+{% assign pdrn_difference_tint     = '#F8E0E7' %}
+{% assign pdrn_bridge_accent       = '#E17DA0' %}
+{% assign pdrn_bridge_accent_deep  = '#9E3B5C' %}
+{% assign pdrn_surface_white       = cur_surface_white %}
+{% assign pdrn_label_ink           = cur_label_ink %}
+{% assign pdrn_radius              = '14px' %}
+{% assign pdrn_footer_grad_1       = '#FBF1E9' %}
+{% assign pdrn_footer_grad_2       = '#E37FA3' %}
+{% assign pdrn_footer_grad_3       = '#6E2740' %}
+{% assign pdrn_footer_accent       = '#C9819C' %}
+
+{% comment %} ============ PALETTE: ICE-GLOBES (final reference-match — ACTIVE for pdrn-sandbox) ============ {% endcomment %}
+{% assign ice_cream               = '#FAFCFC' %}
+{% assign ice_cream_deep          = '#F3F6F6' %}
+{% assign ice_plum                = '#0D0D0D' %}
+{% assign ice_plum_soft           = '#3E4C5C' %}
+{% assign ice_rose                = '#35B9C5' %}
+{% assign ice_rose_deep           = '#20AEBB' %}
+{% assign ice_gold                = '#A8C8D8' %}
+{% assign ice_sage                = '#8BB5C8' %}
+{% assign ice_line                = 'rgba(23, 35, 51, 0.10)' %}
+{% assign ice_tint                = '#D8F0F1' %}
+{% assign ice_tint_alt            = '#F3F6F6' %}
+{% assign ice_accent              = '#20AEBB' %}
+{% assign ice_cta                 = '#706FCB' %}
+{% assign ice_difference_tint     = '#F3F6F6' %}
+{% assign ice_bridge_accent       = '#35B9C5' %}
+{% assign ice_bridge_accent_deep  = '#20AEBB' %}
+{% assign ice_surface_white       = '#FFFFFF' %}
+{% assign ice_label_ink           = '#172333' %}
+{% assign ice_radius              = '14px' %}
+{% assign ice_footer_grad_1       = '#FAFCFC' %}
+{% assign ice_footer_grad_2       = '#35B9C5' %}
+{% assign ice_footer_grad_3       = '#168F9B' %}
+{% assign ice_footer_accent       = '#20AEBB' %}
+{% assign ice_wave_1               = '#55C7D8' %}
+{% assign ice_wave_2               = '#6FCBB0' %}
+{% assign ice_wave_3               = '#0F7E9E' %}
+
+{% case elsora_active_palette %}
+  {% when 'current' %}
+    {% assign px_cream               = cur_cream %}
+    {% assign px_cream_deep          = cur_cream_deep %}
+    {% assign px_plum                = cur_plum %}
+    {% assign px_plum_soft           = cur_plum_soft %}
+    {% assign px_rose                = cur_rose %}
+    {% assign px_rose_deep           = cur_rose_deep %}
+    {% assign px_gold                = cur_gold %}
+    {% assign px_sage                = cur_sage %}
+    {% assign px_line                = cur_line %}
+    {% assign px_tint                = cur_tint %}
+    {% assign px_tint_alt            = cur_tint_alt %}
+    {% assign px_accent              = cur_accent %}
+    {% assign px_cta                 = cur_cta %}
+    {% assign px_difference_tint     = cur_difference_tint %}
+    {% assign px_bridge_accent       = cur_bridge_accent %}
+    {% assign px_bridge_accent_deep  = cur_bridge_accent_deep %}
+    {% assign px_surface_white       = cur_surface_white %}
+    {% assign px_label_ink           = cur_label_ink %}
+    {% assign px_radius              = cur_radius %}
+    {% assign px_footer_grad_1       = cur_footer_grad_1 %}
+    {% assign px_footer_grad_2       = cur_footer_grad_2 %}
+    {% assign px_footer_grad_3       = cur_footer_grad_3 %}
+    {% assign px_footer_accent       = cur_footer_accent %}
+    {% assign px_wave_1              = cur_cream_deep %}
+    {% assign px_wave_2              = cur_tint %}
+    {% assign px_wave_3              = cur_rose %}
+  {% when 'pdrn-sandbox' %}
+    {% assign px_cream               = pdrn_cream %}
+    {% assign px_cream_deep          = pdrn_cream_deep %}
+    {% assign px_plum                = pdrn_plum %}
+    {% assign px_plum_soft           = pdrn_plum_soft %}
+    {% assign px_rose                = pdrn_rose %}
+    {% assign px_rose_deep           = pdrn_rose_deep %}
+    {% assign px_gold                = pdrn_gold %}
+    {% assign px_sage                = pdrn_sage %}
+    {% assign px_line                = pdrn_line %}
+    {% assign px_tint                = pdrn_tint %}
+    {% assign px_tint_alt            = pdrn_tint_alt %}
+    {% assign px_accent              = pdrn_accent %}
+    {% assign px_cta                 = pdrn_cta %}
+    {% assign px_difference_tint     = pdrn_difference_tint %}
+    {% assign px_bridge_accent       = pdrn_bridge_accent %}
+    {% assign px_bridge_accent_deep  = pdrn_bridge_accent_deep %}
+    {% assign px_surface_white       = pdrn_surface_white %}
+    {% assign px_label_ink           = pdrn_label_ink %}
+    {% assign px_radius              = pdrn_radius %}
+    {% assign px_footer_grad_1       = pdrn_footer_grad_1 %}
+    {% assign px_footer_grad_2       = pdrn_footer_grad_2 %}
+    {% assign px_footer_grad_3       = pdrn_footer_grad_3 %}
+    {% assign px_footer_accent       = pdrn_footer_accent %}
+    {% assign px_wave_1              = pdrn_cream_deep %}
+    {% assign px_wave_2              = pdrn_tint %}
+    {% assign px_wave_3              = pdrn_rose %}
+  {% when 'ice-globes' %}
+    {% assign px_cream               = ice_cream %}
+    {% assign px_cream_deep          = ice_cream_deep %}
+    {% assign px_plum                = ice_plum %}
+    {% assign px_plum_soft           = ice_plum_soft %}
+    {% assign px_rose                = ice_rose %}
+    {% assign px_rose_deep           = ice_rose_deep %}
+    {% assign px_gold                = ice_gold %}
+    {% assign px_sage                = ice_sage %}
+    {% assign px_line                = ice_line %}
+    {% assign px_tint                = ice_tint %}
+    {% assign px_tint_alt            = ice_tint_alt %}
+    {% assign px_accent              = ice_accent %}
+    {% assign px_cta                 = ice_cta %}
+    {% assign px_difference_tint     = ice_difference_tint %}
+    {% assign px_bridge_accent       = ice_bridge_accent %}
+    {% assign px_bridge_accent_deep  = ice_bridge_accent_deep %}
+    {% assign px_surface_white       = ice_surface_white %}
+    {% assign px_label_ink           = ice_label_ink %}
+    {% assign px_radius              = ice_radius %}
+    {% assign px_footer_grad_1       = ice_footer_grad_1 %}
+    {% assign px_footer_grad_2       = ice_footer_grad_2 %}
+    {% assign px_footer_grad_3       = ice_footer_grad_3 %}
+    {% assign px_footer_accent       = ice_footer_accent %}
+    {% assign px_wave_1              = ice_wave_1 %}
+    {% assign px_wave_2              = ice_wave_2 %}
+    {% assign px_wave_3              = ice_wave_3 %}
+  {% else %}
+    {% comment %} Unknown palette name: fail safe to current. {% endcomment %}
+    {% assign px_cream               = cur_cream %}
+    {% assign px_cream_deep          = cur_cream_deep %}
+    {% assign px_plum                = cur_plum %}
+    {% assign px_plum_soft           = cur_plum_soft %}
+    {% assign px_rose                = cur_rose %}
+    {% assign px_rose_deep           = cur_rose_deep %}
+    {% assign px_gold                = cur_gold %}
+    {% assign px_sage                = cur_sage %}
+    {% assign px_line                = cur_line %}
+    {% assign px_tint                = cur_tint %}
+    {% assign px_tint_alt            = cur_tint_alt %}
+    {% assign px_accent              = cur_accent %}
+    {% assign px_cta                 = cur_cta %}
+    {% assign px_difference_tint     = cur_difference_tint %}
+    {% assign px_bridge_accent       = cur_bridge_accent %}
+    {% assign px_bridge_accent_deep  = cur_bridge_accent_deep %}
+    {% assign px_surface_white       = cur_surface_white %}
+    {% assign px_label_ink           = cur_label_ink %}
+    {% assign px_radius              = cur_radius %}
+    {% assign px_footer_grad_1       = cur_footer_grad_1 %}
+    {% assign px_footer_grad_2       = cur_footer_grad_2 %}
+    {% assign px_footer_grad_3       = cur_footer_grad_3 %}
+    {% assign px_footer_accent       = cur_footer_accent %}
+    {% assign px_wave_1              = cur_cream_deep %}
+    {% assign px_wave_2              = cur_tint %}
+    {% assign px_wave_3              = cur_rose %}
+{% endcase %}
+
+{% style %}
+  :root {
+    --elsora-font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --elsora-font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    --elsora-cream: {{ px_cream }};
+    --elsora-cream-deep: {{ px_cream_deep }};
+    --elsora-plum: {{ px_plum }};
+    --elsora-plum-soft: {{ px_plum_soft }};
+    --elsora-rose: {{ px_rose }};
+    --elsora-rose-deep: {{ px_rose_deep }};
+    --elsora-gold: {{ px_gold }};
+    --elsora-sage: {{ px_sage }};
+    --elsora-line: {{ px_line }};
+    --elsora-tint: {{ px_tint }};
+    --elsora-tint-alt: {{ px_tint_alt }};
+    --elsora-accent: {{ px_accent }};
+    --elsora-cta: {{ px_cta }};
+
+    --elsora-difference-tint: {{ px_difference_tint }};
+    --elsora-bridge-accent: {{ px_bridge_accent }};
+    --elsora-bridge-accent-deep: {{ px_bridge_accent_deep }};
+    --elsora-surface-white: {{ px_surface_white }};
+    --elsora-label-ink: {{ px_label_ink }};
+
+    --elsora-footer-grad-1: {{ px_footer_grad_1 }};
+    --elsora-footer-grad-2: {{ px_footer_grad_2 }};
+    --elsora-footer-grad-3: {{ px_footer_grad_3 }};
+    --elsora-footer-accent: {{ px_footer_accent }};
+
+    --elsora-wave-1: {{ px_wave_1 }};
+    --elsora-wave-2: {{ px_wave_2 }};
+    --elsora-wave-3: {{ px_wave_3 }};
+
+    --elsora-radius: {{ px_radius }};
+    --elsora-container-max: 1180px;
+
+    --elsora-shadow-soft: 0 10px 20px -10px rgba(46, 32, 36, 0.10), 0 22px 40px -16px rgba(46, 32, 36, 0.12);
+    --elsora-shadow-image: 0 12px 24px -8px rgba(46, 32, 36, 0.20), 0 32px 56px -16px rgba(46, 32, 36, 0.26), 0 56px 84px -26px rgba(46, 32, 36, 0.22);
+    --elsora-shadow-image-hover: 0 14px 28px -8px rgba(46, 32, 36, 0.24), 0 38px 64px -14px rgba(46, 32, 36, 0.32), 0 64px 96px -24px rgba(46, 32, 36, 0.28);
+
+    --elsora-text-shadow-3d: 0 2px 3px rgba(13, 13, 13, 0.14), 0 8px 16px rgba(46, 32, 36, 0.22);
+    --elsora-text-shadow-3d-sm: 0 3px 6px rgba(46, 32, 36, 0.22);
+    --elsora-text-shadow-3d-footer: 0 2px 3px rgba(13, 13, 13, 0.24), 0 6px 12px rgba(13, 13, 13, 0.28);
+  }
+
+  {% if elsora_active_palette == 'ice-globes' %}
+  /* ---- Heading shadow (sandbox only): hero title + price, section headings, footer newsletter heading ---- */
+  [id$="__hero_banner_sandbox"] h1,
+  [id$="__lifestyle_row_sandbox"] h2,
+  [id$="__difference_grid_sandbox"] h2,
+  [id$="__how_to_steps_sandbox"] h2,
+  [id$="__reviews_grid_sandbox"] h2,
+  [id$="__faq_accordion_sandbox"] h2 {
+    text-shadow: var(--elsora-text-shadow-3d);
+  }
+  [id$="__hero_banner_sandbox"] [class*="cv-price-now-"] {
+    text-shadow: var(--elsora-text-shadow-3d-sm);
+  }
+  .footer-block__newsletter .footer-block__heading {
+    text-shadow: var(--elsora-text-shadow-3d-footer);
+  }
+  {% endif %}
+{% endstyle %}

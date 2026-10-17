@@ -1,0 +1,143 @@
+{% assign sid = section.id %}
+{%- assign is_pdrn_sandbox = false -%}
+{%- if template.suffix == 'pdrn-sandbox' or template.suffix == 'ice-globes' or template.name == 'index' -%}
+  {%- assign is_pdrn_sandbox = true -%}
+{%- endif -%}
+
+<div class="cv-lifestyle-{{ sid }}{% if section.settings.reverse %} cv-lifestyle--reverse-{{ sid }}{% endif %}">
+  <div class="cv-lifestyle__img-{{ sid }}">
+    {% if section.settings.image %}
+      <img src="{{ section.settings.image | image_url: width: 1200 }}"
+           srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 1200 }} 1200w"
+           sizes="(max-width: 900px) 100vw, 50vw"
+           alt="{{ section.settings.image.alt | escape }}"
+           loading="lazy"
+           width="{{ section.settings.image.width }}"
+           height="{{ section.settings.image.height }}">
+    {% else %}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'cv-lifestyle__placeholder-' | append: sid }}
+    {% endif %}
+  </div>
+  <div class="cv-lifestyle__copy-{{ sid }}">
+    {% if section.settings.label != blank %}
+      <div class="cv-section-label-{{ sid }}">{{ section.settings.label }}</div>
+    {% endif %}
+    <h2>{{ section.settings.headline }}</h2>
+    {% for block in section.blocks %}
+      {% if block.type == 'paragraph' %}
+        <p {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% style %}
+  .cv-lifestyle-{{ sid }} {
+    --cv-plum: var(--elsora-plum);
+    --cv-plum-soft: var(--elsora-plum-soft);
+    --cv-cream-deep: var(--elsora-cream-deep);
+    --cv-rose-deep: var(--elsora-rose-deep);
+    --cv-radius: var(--elsora-radius);
+
+    max-width: var(--elsora-container-max);
+    margin: 0 auto;
+    padding: 32px 32px;
+    display: grid;
+    grid-template-columns: .9fr 1.1fr;
+    gap: 70px;
+    align-items: center;
+    font-family: var(--elsora-font-body);
+    color: var(--cv-plum);
+    box-sizing: border-box;
+  }
+  .cv-lifestyle-{{ sid }} *, .cv-lifestyle-{{ sid }} *::before, .cv-lifestyle-{{ sid }} *::after { box-sizing: border-box; }
+  .cv-lifestyle-{{ sid }} img { max-width: 100%; display: block; }
+
+  .cv-lifestyle--reverse-{{ sid }} { direction: rtl; }
+  .cv-lifestyle--reverse-{{ sid }} > * { direction: ltr; }
+  .cv-lifestyle--reverse-{{ sid }} {
+  margin-top: -60px;
+}
+
+  .cv-lifestyle__img-{{ sid }} {
+    border-radius: var(--cv-radius);
+    overflow: hidden;
+  }
+  .cv-lifestyle__img-{{ sid }} img {
+    border-radius: var(--cv-radius);
+    width: 100%;
+    aspect-ratio: 1 / 1.1;
+    object-fit: cover;
+    object-position: center top;
+    box-shadow: var(--elsora-shadow-image);
+    transform: scale(1.035);
+    transform-origin: top left;
+    transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s cubic-bezier(.22,1,.36,1);
+  }
+  .cv-lifestyle__img-{{ sid }} img:hover {
+    transform: scale(1.035) translateY(-6px);
+    box-shadow: var(--elsora-shadow-image-hover);
+  }
+
+  {%- if is_pdrn_sandbox -%}
+    .cv-lifestyle__img-{{ sid }} img {
+      box-shadow: none;
+    }
+    .cv-lifestyle__img-{{ sid }} img:hover {
+      transform: scale(1.035);
+      box-shadow: none;
+    }
+  {%- endif -%}
+
+  .cv-section-label-{{ sid }} {
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: #706FCB;
+    margin-bottom: 14px;
+  }
+  .cv-lifestyle__copy-{{ sid }} h2 {
+    font-family: var(--elsora-font-display);
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 400; line-height: 1.15; margin: 0 0 20px;
+    color: var(--cv-plum);
+  }
+  .cv-lifestyle__copy-{{ sid }} p {
+    font-size: 16px; line-height: 1.75; color: var(--cv-plum-soft);
+    max-width: 460px; margin: 0;
+  }
+  .cv-lifestyle__copy-{{ sid }} p + p { margin-top: 14px; }
+
+  @media (max-width: 900px) {
+    .cv-lifestyle-{{ sid }} { grid-template-columns: 1fr; gap: 36px; padding: 48px 20px; }
+    .cv-lifestyle--reverse-{{ sid }} { margin-top: 0; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "CV Lifestyle Row",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "reverse", "label": "Reverse layout (image on right)", "default": false },
+    { "type": "text", "id": "label", "label": "Eyebrow label", "default": "The problem with shaving" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Razors were never built for sensitive skin." }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "settings": [
+        { "type": "textarea", "id": "text", "label": "Paragraph text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CV Lifestyle Row",
+      "blocks": [
+        { "type": "paragraph", "settings": { "text": "Nicks, ingrown hairs, and that raw, stinging feeling an hour later — if your skin reacts to shaving, you already know the routine isn't working for you." } },
+        { "type": "paragraph", "settings": { "text": "CloudVeil replaces the blade entirely. A fine mousse settles into the hair, gently dissolving it below the surface — so you wipe it away instead of cutting it off." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

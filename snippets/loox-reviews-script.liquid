@@ -1,0 +1,350 @@
+{% comment %}
+  ELSORA x Loox Storefront API integration.
+
+  Toggles, by element:
+    #cv-loox-launch-badge   "Just launched" badge (hero-banner.liquid) — on by default, hidden at 5+ reviews (inline style — no responsive display override on this class to fight)
+    #cv-loox-rating-line    real star rating (hero-banner.liquid) — off by default, shown at 5+ reviews (inline style, same reason)
+    #cv-loox-cards          review card grid (reviews-grid.liquid) — off by default, shown at 1+ reviews (via the `hidden` property — this one DOES have a responsive display value (grid desktop / flex mobile carousel), so it must stay unhidden via `hidden` rather than a hardcoded inline display, with a `[hidden]{display:none!important}` backstop in the section's CSS so the attribute reliably wins)
+    #cv-loox-new-brand-line "New from ELSORA..." line (reviews-grid.liquid) — on by default, hidden at 1+ reviews (via `hidden`)
+    #cv-loox-no-reviews-faq "Why are there no reviews yet?" FAQ item — on by default, hidden at 1+ reviews (via `hidden`)
+  plus a single combined Product/AggregateRating/Review JSON-LD block (1+ reviews only).
+
+  Review photos/video: each card's cover comes straight from the Loox media
+  URL in the API response (never re-encoded/base64). A review with multiple
+  media items shows a "+N" count on the cover; tapping it opens a lightbox
+  (built once, lazily) that swipes through that review's own media only.
+  Video items use their own thumbnail as the cover with a play icon; a video
+  with no thumbnail in the API response is skipped as a cover candidate
+  (falls back to the next photo, or to a photo-less card if none exist) but
+  can still be reached by swiping to it inside an already-open lightbox.
+
+  FTC disclosure: every review with at least one photo/video media item gets
+  "Received a discount for sharing a photo or video". The Loox Storefront API
+  has no incentivized field; in our setup the discount is only ever given for
+  photo/video reviews via request emails, so media presence is exact.
+
+  Storefront API only (no secret key, public data, CORS-validated by Origin).
+  On any failure, everything stays at its safe default above — no error UI.
+
+  This snippet is rendered from hero-banner.liquid and reviews-grid.liquid
+  so each section stays self-contained; the init guard below means only the
+  first copy to execute actually runs the fetch/render logic.
+{% endcomment %}
+{%- if product -%}
+<script>
+(function () {
+  if (window.__elsoraLooxInit) return;
+  window.__elsoraLooxInit = true;
+
+  var STORE_ID = {{ 'qoX45M03vZ.7c9d78fa9d9954aafe5e1699997b842ede44507048709427207f7339db11524a' | json }};
+  var PRODUCT_ID = {{ product.id | json }};
+  var PRODUCT_TITLE = {{ product.title | json }};
+  var BASE = 'https://storefront-api.loox.io/storefront/v1/store/' + STORE_ID;
+
+  function schedule(fn) {
+    function go() {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(fn, { timeout: 2000 });
+      } else {
+        setTimeout(fn, 200);
+      }
+    }
+    if (document.readyState === 'complete') {
+      go();
+    } else {
+      window.addEventListener('load', go);
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function stars(n) {
+    var full = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
+    return '★'.repeat(full) + '☆'.repeat(5 - full);
+  }
+
+  function updateLaunchBadgeAndRating(avg, total) {
+    if (total < 5) return;
+    var badge = document.getElementById('cv-loox-launch-badge');
+    var line = document.getElementById('cv-loox-rating-line');
+    var textEl = document.getElementById('cv-loox-rating-text');
+    if (badge) badge.style.display = 'none';
+    if (line && textEl) {
+      var rounded = Math.round(avg * 10) / 10;
+      textEl.textContent = rounded + ' out of 5 from ' + total + (total === 1 ? ' review' : ' reviews');
+      line.style.display = 'flex';
+    }
+  }
+
+  function updateBrandLine(total) {
+    if (total < 1) return;
+    var el = document.getElementById('cv-loox-new-brand-line');
+    if (el) el.hidden = true;
+  }
+
+  function updateNoReviewsFaq(total) {
+    if (total < 1) return;
+    var el = document.getElementById('cv-loox-no-reviews-faq');
+    if (el) el.hidden = true;
+  }
+
+  function sortReviews(reviews) {
+    return reviews.slice().sort(function (a, b) {
+      var aHas = a.media && a.media.length ? 1 : 0;
+      var bHas = b.media && b.media.length ? 1 : 0;
+      if (aHas !== bHas) return bHas - aHas;
+      var aDate = new Date(a.date || a.createdAt || 0).getTime();
+      var bDate = new Date(b.date || b.createdAt || 0).getTime();
+      return bDate - aDate;
+    });
+  }
+
+  function mediaItemsFor(rv) {
+    var items = [];
+    if (rv.media && rv.media.length) {
+      for (var i = 0; i < rv.media.length; i++) {
+        var m = rv.media[i];
+        if (m && m.url && (m.type === 'photo' || m.type === 'image' || m.type === 'video')) items.push(m);
+      }
+    }
+    return items;
+  }
+
+  function videoThumb(m) {
+    return m.thumbnailUrl || m.thumbnail || m.poster || '';
+  }
+
+  function coverCandidates(items) {
+    return items.filter(function (m) {
+      if (m.type === 'photo' || m.type === 'image') return true;
+      if (m.type === 'video') return !!videoThumb(m);
+      return false;
+    });
+  }
+
+  /* ---- Lightbox: one shared overlay, built lazily on first use, swipes
+     through whichever review's media array it was opened with. ---- */
+  var lightboxMedia = [];
+  var lightboxIndex = 0;
+  var lightboxEls = null;
+
+  function buildLightbox() {
+    if (lightboxEls) return lightboxEls;
+
+    var style = document.createElement('style');
+    style.id = 'cv-loox-lightbox-style';
+    style.textContent =
+      '.cv-loox-lightbox{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;}' +
+      '.cv-loox-lightbox[hidden]{display:none;}' +
+      '.cv-loox-lightbox__backdrop{position:absolute;inset:0;background:rgba(13,13,13,0.85);}' +
+      '.cv-loox-lightbox__stage{position:relative;z-index:1;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center;}' +
+      '.cv-loox-lightbox__stage img,.cv-loox-lightbox__stage video{max-width:90vw;max-height:90vh;object-fit:contain;display:block;border-radius:4px;}' +
+      '.cv-loox-lightbox__close,.cv-loox-lightbox__nav{position:absolute;z-index:2;background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;cursor:pointer;line-height:1;}' +
+      '.cv-loox-lightbox__close{top:16px;right:16px;width:40px;height:40px;font-size:18px;}' +
+      '.cv-loox-lightbox__nav{top:50%;transform:translateY(-50%);width:44px;height:44px;font-size:24px;}' +
+      '.cv-loox-lightbox__nav--prev{left:16px;}' +
+      '.cv-loox-lightbox__nav--next{right:16px;}' +
+      '@media (max-width:600px){.cv-loox-lightbox__nav{width:36px;height:36px;font-size:20px;}.cv-loox-lightbox__close{width:34px;height:34px;font-size:16px;}}';
+    document.head.appendChild(style);
+
+    var lb = document.createElement('div');
+    lb.className = 'cv-loox-lightbox';
+    lb.id = 'cv-loox-lightbox';
+    lb.hidden = true;
+    lb.innerHTML =
+      '<div class="cv-loox-lightbox__backdrop"></div>' +
+      '<button type="button" class="cv-loox-lightbox__close" aria-label="Close">✕</button>' +
+      '<button type="button" class="cv-loox-lightbox__nav cv-loox-lightbox__nav--prev" aria-label="Previous">‹</button>' +
+      '<div class="cv-loox-lightbox__stage"></div>' +
+      '<button type="button" class="cv-loox-lightbox__nav cv-loox-lightbox__nav--next" aria-label="Next">›</button>';
+    document.body.appendChild(lb);
+
+    var stage = lb.querySelector('.cv-loox-lightbox__stage');
+    var prevBtn = lb.querySelector('.cv-loox-lightbox__nav--prev');
+    var nextBtn = lb.querySelector('.cv-loox-lightbox__nav--next');
+
+    function render() {
+      var item = lightboxMedia[lightboxIndex];
+      if (!item) return;
+      stage.innerHTML = item.type === 'video'
+        ? '<video src="' + escapeHtml(item.url) + '" controls autoplay playsinline></video>'
+        : '<img src="' + escapeHtml(item.url) + '" alt="">';
+      var showNav = lightboxMedia.length > 1;
+      prevBtn.style.display = showNav ? '' : 'none';
+      nextBtn.style.display = showNav ? '' : 'none';
+    }
+    function close() {
+      lb.hidden = true;
+      stage.innerHTML = '';
+    }
+    function next() { lightboxIndex = (lightboxIndex + 1) % lightboxMedia.length; render(); }
+    function prev() { lightboxIndex = (lightboxIndex - 1 + lightboxMedia.length) % lightboxMedia.length; render(); }
+
+    lb.querySelector('.cv-loox-lightbox__close').addEventListener('click', close);
+    lb.querySelector('.cv-loox-lightbox__backdrop').addEventListener('click', close);
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight') next();
+      else if (e.key === 'ArrowLeft') prev();
+    });
+
+    var touchStartX = null;
+    stage.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      if (touchStartX === null) return;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); }
+      touchStartX = null;
+    }, { passive: true });
+
+    lightboxEls = { root: lb, render: render, open: function (mediaArr, startIdx) {
+      lightboxMedia = mediaArr;
+      lightboxIndex = startIdx || 0;
+      render();
+      lb.hidden = false;
+    } };
+    return lightboxEls;
+  }
+
+  function openLightbox(mediaArr, startIdx) {
+    buildLightbox().open(mediaArr, startIdx);
+  }
+
+  function renderCards(reviews) {
+    var container = document.getElementById('cv-loox-cards');
+    if (!container) return;
+
+    var mediaByCard = reviews.map(mediaItemsFor);
+
+    var html = reviews.map(function (rv, idx) {
+      var items = mediaByCard[idx];
+      var candidates = coverCandidates(items);
+      var photoHtml = '';
+
+      if (candidates.length) {
+        var cover = candidates[0];
+        var coverIndexInItems = items.indexOf(cover);
+        var isVideo = cover.type === 'video';
+        var coverSrc = isVideo ? videoThumb(cover) : cover.url;
+        var extra = items.length - 1;
+        var name = (rv.reviewer && rv.reviewer.name) || '';
+        var playIcon = isVideo ? '<span class="cv-loox-play-icon" aria-hidden="true">▶</span>' : '';
+        var countBadge = extra > 0 ? '<span class="cv-loox-photo-count">+' + extra + '</span>' : '';
+
+        photoHtml =
+          '<div class="cv-loox-photo" data-loox-photo data-card-idx="' + idx + '" data-start-idx="' + coverIndexInItems + '" tabindex="0" role="button" aria-label="View photos">' +
+            '<img src="' + escapeHtml(coverSrc) + '" loading="lazy" alt="' + escapeHtml(name) + ' review photo" onerror="this.parentNode.style.display=\'none\'">' +
+            playIcon + countBadge +
+          '</div>';
+      }
+
+      var name2 = (rv.reviewer && rv.reviewer.name) || '';
+      var verifiedHtml = rv.verified ? '<span class="cv-loox-verified">Verified purchase</span>' : '';
+      var disclosureHtml = items.length
+        ? '<div class="cv-loox-disclosure"><span>Received a discount for sharing a photo or video</span></div>'
+        : '';
+      return (
+        '<div class="cv-loox-card">' +
+          photoHtml +
+          '<div class="cv-loox-stars">' + stars(rv.rating) + '</div>' +
+          '<div class="cv-loox-body">' + escapeHtml(rv.body) + '</div>' +
+          '<div class="cv-loox-meta"><span class="cv-loox-name">' + escapeHtml(name2) + '</span>' + verifiedHtml + '</div>' +
+          disclosureHtml +
+        '</div>'
+      );
+    }).join('');
+
+    container.innerHTML = html;
+    container.hidden = false;
+
+    var photoEls = container.querySelectorAll('[data-loox-photo]');
+    for (var p = 0; p < photoEls.length; p++) {
+      (function (el) {
+        function activate() {
+          var cardIdx = parseInt(el.getAttribute('data-card-idx'), 10);
+          var startIdx = parseInt(el.getAttribute('data-start-idx'), 10) || 0;
+          var items = mediaByCard[cardIdx];
+          if (items && items.length) openLightbox(items, startIdx);
+        }
+        el.addEventListener('click', activate);
+        el.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+        });
+      })(photoEls[p]);
+    }
+  }
+
+  function injectJsonLd(avg, total, reviews) {
+    if (document.getElementById('cv-loox-jsonld')) return;
+    var data = {
+      '@context': 'https://schema.org/',
+      '@type': 'Product',
+      name: PRODUCT_TITLE,
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Math.round(avg * 10) / 10,
+        reviewCount: total
+      },
+      review: reviews.slice(0, 30).map(function (rv) {
+        return {
+          '@type': 'Review',
+          reviewRating: { '@type': 'Rating', ratingValue: rv.rating },
+          author: { '@type': 'Person', name: (rv.reviewer && rv.reviewer.name) || 'Verified Customer' },
+          reviewBody: rv.body || '',
+          datePublished: (rv.date || rv.createdAt || '').slice(0, 10)
+        };
+      })
+    };
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'cv-loox-jsonld';
+    s.textContent = JSON.stringify(data);
+    document.head.appendChild(s);
+  }
+
+  function run() {
+    fetch(BASE + '/product-reviews/bottomline/' + encodeURIComponent(PRODUCT_ID))
+      .then(function (r) { if (!r.ok) throw new Error('bottomline http ' + r.status); return r.json(); })
+      .then(function (bottom) {
+        var total = bottom.totalReviews || 0;
+        var avg = bottom.averageRating || 0;
+
+        updateLaunchBadgeAndRating(avg, total);
+        updateBrandLine(total);
+        updateNoReviewsFaq(total);
+
+        if (total < 1) return;
+
+        return fetch(BASE + '/product-reviews?product_id=' + encodeURIComponent(PRODUCT_ID) + '&limit=50&sort=date&direction=desc')
+          .then(function (r) { if (!r.ok) throw new Error('reviews http ' + r.status); return r.json(); })
+          .then(function (list) {
+            var reviews = (list && list.reviews) || [];
+            if (!reviews.length) return;
+            reviews = sortReviews(reviews);
+            renderCards(reviews);
+            injectJsonLd(avg, total, reviews);
+          });
+      })
+      .catch(function () {
+        /* Any failure: everything stays at its safe default (launch badge,
+           brand line and no-reviews FAQ visible; cards/rating/JSON-LD absent). */
+      });
+  }
+
+  schedule(run);
+})();
+</script>
+{%- endif -%}

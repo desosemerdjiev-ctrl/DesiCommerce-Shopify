@@ -1,0 +1,100 @@
+{% assign sid = section.id %}
+{%- assign is_pdrn_sandbox = false -%}
+{%- if template.suffix == 'pdrn-sandbox' or template.suffix == 'ice-globes' or template.name == 'index' -%}
+  {%- assign is_pdrn_sandbox = true -%}
+{%- endif -%}
+
+<div class="cv-proof-{{ sid }}">
+  <div class="cv-proof__row-{{ sid }}">
+    {% for block in section.blocks %}
+      <div class="cv-proof__item-{{ sid }}" {{ block.shopify_attributes }}><strong>{{ block.settings.number }}</strong>{{ block.settings.label }}</div>
+    {% endfor %}
+  </div>
+</div>
+
+{% style %}
+  .cv-proof-{{ sid }} {
+    --cv-cream: var(--elsora-cream);
+    --cv-plum: var(--elsora-plum);
+
+    background: var(--cv-plum);
+    color: var(--cv-cream);
+    padding: 16px 0;
+    font-family: var(--elsora-font-body);
+  }
+  .cv-proof-{{ sid }} * { box-sizing: border-box; }
+
+  {%- if is_pdrn_sandbox -%}
+    .cv-proof-{{ sid }} {
+      background: #C7EFE0;
+      background: var(--elsora-finish-flat, none), #C7EFE0;
+      background-size: var(--elsora-finish-flat-size, auto);
+      background-repeat: var(--elsora-finish-flat-repeat, repeat);
+      background-blend-mode: var(--elsora-finish-flat-blend, normal);
+      color: #706FCB;
+    }
+  {%- endif -%}
+
+  .cv-proof__row-{{ sid }} {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: repeat({{ section.blocks.size | at_least: 1 }}, minmax(0, 1fr));
+    justify-items: center;
+    align-items: start;
+    gap: 40px;
+    font-size: 13px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  @media (max-width: 760px) {
+    .cv-proof__row-{{ sid }} { padding: 0 16px; gap: 12px; }
+  }
+
+  .cv-proof__item-{{ sid }} {
+    min-width: 0;
+    width: 100%;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  .cv-proof__row-{{ sid }} strong {
+    font-family: var(--elsora-font-display);
+    font-size: 19px;
+    display: block;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 2px;
+    font-weight: 500;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "CV Proof Strip",
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "287+" },
+        { "type": "text", "id": "label", "label": "Label", "default": "verified reviews" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CV Proof Strip",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "287+", "label": "verified reviews" } },
+        { "type": "stat", "settings": { "number": "4.94 / 5", "label": "average rating" } },
+        { "type": "stat", "settings": { "number": "5 min", "label": "average result time" } },
+        { "type": "stat", "settings": { "number": "0", "label": "razor nicks required" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

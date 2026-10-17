@@ -1,0 +1,68 @@
+{%- comment -%}
+  ELSORA mobile menu drawer finish (round 15). Rendered as the first child of
+  #menu-drawer in snippets/header-drawer.liquid.
+
+  On every page that uses the ELSORA header (round 15c; it used to be only
+  the sandbox page, product.ice-globes and /cart), only below 990px (where the hamburger drawer is used; desktop uses the
+  dropdown menu and is unchanged).
+  - Background: snippets/elsora-wave-bg.liquid (same wave ribbons) with the
+    hero's light-aqua colours (no grey areas); the bottom fades into white
+    (round 15b). Just below the panel a SHORT white fade (22px, round 15d)
+    hides the edge; the 64px version from 15b washed out the purple hero
+    eyebrow, so keep it short. Plus the background finish layers (grain + satin sheen) from
+    snippets/elsora-bg-finish.liquid via var(--elsora-finish-wave*).
+  - Items: dark text, no grey highlight; hover/focus = soft translucent
+    white, active item = thin lavender underline.
+  - Header (X, logo, cart) and the open/close behaviour are not touched.
+{%- endcomment -%}
+  {%- render 'elsora-wave-bg' -%}
+  <style>
+    #menu-drawer > .elsora-wave-bg { display: none; }
+    @media screen and (max-width: 989px) {
+      #menu-drawer.menu-drawer {
+        background: #FFFFFF;
+        isolation: isolate;
+        overflow: visible;
+      }
+      #menu-drawer.menu-drawer::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        height: 22px;
+        background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0) 100%);
+        pointer-events: none;
+      }
+      #menu-drawer > .elsora-wave-bg {
+        display: block;
+        background: #A8F0F8;
+        background: var(--elsora-finish-wave, none), linear-gradient(
+          180deg,
+          #F0F8F8 0%, #D0F0F8 12%, #A8F0F8 30%, #78E8F0 52%, #58E8F0 62%, #70E8F0 72%, #A0F0F8 82%, #D8F8F8 92%, #FFFFFF 100%
+        );
+        background-size: var(--elsora-finish-wave-size, auto);
+        background-repeat: var(--elsora-finish-wave-repeat, repeat);
+        background-blend-mode: var(--elsora-finish-wave-blend, normal);
+      }
+      #menu-drawer > .elsora-wave-bg .elsora-wave-bg__top-fade { display: none; }
+      #menu-drawer .menu-drawer__utility-links { background-color: transparent; }
+      #menu-drawer .menu-drawer__menu-item,
+      #menu-drawer .menu-drawer__account {
+        color: #0D0D0D;
+        background-color: transparent;
+      }
+      #menu-drawer .menu-drawer__menu-item:hover,
+      #menu-drawer .menu-drawer__menu-item:focus,
+      #menu-drawer .menu-drawer__menu-item--active:hover {
+        color: #0D0D0D;
+        background-color: rgba(255, 255, 255, 0.32);
+      }
+      #menu-drawer .menu-drawer__menu-item--active {
+        text-decoration: underline;
+        text-decoration-color: #706FCB;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 6px;
+      }
+    }
+  </style>

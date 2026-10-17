@@ -1,0 +1,371 @@
+{{ 'section-contact-form.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- comment -%}
+  ELSORA contact page: same wave background as /cart (snippets/elsora-wave-bg.liquid),
+  intro line, the form in a soft white card, rounded inputs and the purple ELSORA button.
+  This section is only used by templates/page.contact.json.
+{%- endcomment -%}
+{% render 'elsora-wave-bg' %}
+
+<div class="elsora-contact color-{{ section.settings.color_scheme }} gradient">
+  <div class="contact page-width page-width--narrow section-{{ section.id }}-padding">
+    <p class="elsora-contact__intro">
+      We reply within 24 business hours<span class="elsora-contact__dot" aria-hidden="true">&middot;</span><a href="mailto:support@elsora.store">support@elsora.store</a>
+    </p>
+    {%- if section.settings.heading != blank -%}
+      <h2 class="title title-wrapper--no-top-margin inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.heading }}
+      </h2>
+    {%- else -%}
+      <h2 class="visually-hidden">{{ 'templates.contact.form.title' | t }}</h2>
+    {%- endif -%}
+    {%- liquid
+      assign contact_form_class = 'isolate'
+      if settings.animations_reveal_on_scroll
+        assign contact_form_class = 'isolate scroll-trigger animate--slide-in'
+      endif
+    -%}
+    {%- form 'contact', id: 'ContactForm', class: contact_form_class -%}
+      {%- if form.posted_successfully? -%}
+        <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>
+          {{- 'icon-success.svg' | inline_asset_content -}}
+          {{ 'templates.contact.form.post_success' | t }}
+        </h2>
+      {%- elsif form.errors -%}
+        <div class="form__message">
+          <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
+            {{- 'icon-error.svg' | inline_asset_content -}}
+            {{ 'templates.contact.form.error_heading' | t }}
+          </h2>
+        </div>
+        <ul class="form-status-list caption-large" role="list">
+          <li>
+            <a href="#ContactForm-email" class="link">
+              {{ form.errors.translated_fields.email | capitalize }}
+              {{ form.errors.messages.email }}
+            </a>
+          </li>
+        </ul>
+      {%- endif -%}
+      <div class="contact__fields">
+        <div class="field">
+          <input
+            class="field__input"
+            autocomplete="name"
+            type="text"
+            id="ContactForm-name"
+            name="contact[{{ 'templates.contact.form.name' | t }}]"
+            value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+            placeholder="{{ 'templates.contact.form.name' | t }}"
+          >
+          <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
+        </div>
+        <div class="field field--with-error">
+          <input
+            autocomplete="email"
+            type="email"
+            id="ContactForm-email"
+            class="field__input"
+            name="contact[email]"
+            spellcheck="false"
+            autocapitalize="off"
+            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+            aria-required="true"
+            {% if form.errors contains 'email' %}
+              aria-invalid="true"
+              aria-describedby="ContactForm-email-error"
+            {% endif %}
+            placeholder="{{ 'templates.contact.form.email' | t }}"
+          >
+          <label class="field__label" for="ContactForm-email">
+            {{- 'templates.contact.form.email' | t }}
+            <span aria-hidden="true">*</span></label
+          >
+          {%- if form.errors contains 'email' -%}
+            <small class="contact__field-error" id="ContactForm-email-error">
+              <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+              <span class="form__message">
+                <span class="svg-wrapper">
+                  {{- 'icon-error.svg' | inline_asset_content -}}
+                </span>
+                {{- form.errors.translated_fields.email | capitalize }}
+                {{ form.errors.messages.email -}}
+              </span>
+            </small>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="field">
+        <input
+          type="tel"
+          id="ContactForm-phone"
+          class="field__input"
+          autocomplete="tel"
+          name="contact[{{ 'templates.contact.form.phone' | t }}]"
+          pattern="[0-9\-]*"
+          value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+          placeholder="{{ 'templates.contact.form.phone' | t }}"
+        >
+        <label class="field__label" for="ContactForm-phone">{{ 'templates.contact.form.phone' | t }}</label>
+      </div>
+      <div class="field">
+        <textarea
+          rows="10"
+          id="ContactForm-body"
+          class="text-area field__input"
+          name="contact[{{ 'templates.contact.form.comment' | t }}]"
+          placeholder="{{ 'templates.contact.form.comment' | t }}"
+        >
+          {{- form.body -}}
+        </textarea>
+        <label class="form__label field__label" for="ContactForm-body">
+          {{- 'templates.contact.form.comment' | t -}}
+        </label>
+      </div>
+      <div class="contact__button">
+        <button type="submit" class="button">
+          {{ 'templates.contact.form.send' | t }}
+        </button>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+<style>
+  /* ---- Wave background behind the whole contact page ---- */
+  #MainContent {
+    position: relative;
+    isolation: isolate;
+    min-height: 72vh;
+  }
+  #MainContent .elsora-contact {
+    background: transparent;
+  }
+
+  /* ---- "Contact" title (sections/main-page.liquid) ---- */
+  #MainContent .main-page-title {
+    font-family: var(--elsora-font-display);
+    font-weight: 500;
+    font-size: clamp(32px, 3.6vw, 46px);
+    line-height: 1.15;
+    letter-spacing: 0;
+    color: var(--elsora-plum);
+    text-shadow: var(--elsora-text-shadow-3d);
+    text-align: center;
+    margin: 12px 0 0;
+  }
+
+  /* ---- Intro line ---- */
+  .elsora-contact .contact {
+    padding-top: 0;
+  }
+  .elsora-contact__intro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 10px;
+    margin: 0 0 22px;
+    font-family: var(--elsora-font-body);
+    font-size: 14.5px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    line-height: 1.5;
+    color: var(--elsora-plum-soft);
+    text-align: center;
+  }
+  .elsora-contact__dot {
+    color: #706FCB;
+  }
+  .elsora-contact__intro a {
+    color: #706FCB;
+    text-decoration: none;
+  }
+  .elsora-contact__intro a:hover {
+    text-decoration: underline;
+    text-underline-offset: .3rem;
+  }
+
+  /* ---- Form card ---- */
+  .elsora-contact #ContactForm {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: var(--elsora-radius);
+    box-shadow: var(--elsora-shadow-soft);
+    padding: 32px 32px 34px;
+  }
+
+  /* ---- Rounded ELSORA inputs ---- */
+  .elsora-contact .field:before,
+  .elsora-contact .field:after {
+    content: none;
+  }
+  .elsora-contact .field__input,
+  .elsora-contact .text-area {
+    background: #FFFFFF;
+    border: 1px solid rgba(112, 111, 203, 0.35);
+    border-radius: 12px;
+    box-shadow: none;
+    font-family: var(--elsora-font-body);
+    font-weight: 400;
+    color: var(--elsora-plum);
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .elsora-contact .field__input:focus,
+  .elsora-contact .text-area:focus,
+  .elsora-contact .field__input:focus-visible,
+  .elsora-contact .text-area:focus-visible {
+    outline: none;
+    border-color: #706FCB;
+    box-shadow: 0 0 0 3px rgba(112, 111, 203, 0.15);
+  }
+  .elsora-contact .field__label {
+    font-family: var(--elsora-font-body);
+    color: var(--elsora-plum-soft);
+  }
+
+  /* ---- Purple ELSORA "Send" button ---- */
+  .elsora-contact .contact__button {
+    margin-top: 22px;
+  }
+  .elsora-contact .contact__button .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+    padding: 18px 24px;
+    background: var(--elsora-cta);
+    color: var(--elsora-surface-white);
+    border: none;
+    border-radius: var(--elsora-radius);
+    font-family: var(--elsora-font-body);
+    font-size: 14.5px;
+    font-weight: 400;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    box-shadow: 0 10px 20px -10px rgba(112, 111, 203, 0.55);
+    transition: background-color .25s ease, box-shadow .25s ease;
+  }
+  .elsora-contact .contact__button .button:before,
+  .elsora-contact .contact__button .button:after {
+    content: none;
+  }
+  .elsora-contact .contact__button .button:hover {
+    background: #5F5EBB;
+    box-shadow: 0 14px 26px -12px rgba(112, 111, 203, 0.6);
+  }
+
+  /* ---- Mobile (375 / 390 / 430) ---- */
+  @media screen and (max-width: 749px) {
+    .elsora-contact .contact {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .elsora-contact__intro {
+      font-size: 13.5px;
+    }
+    .elsora-contact #ContactForm {
+      padding: 22px 16px 24px;
+    }
+    .elsora-contact .contact__button .button {
+      padding: 16px 20px;
+      font-size: 14px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "t:sections.contact-form.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "t:sections.contact-form.settings.title.default",
+      "label": "t:sections.contact-form.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact-form.presets.name"
+    }
+  ]
+}
+{% endschema %}

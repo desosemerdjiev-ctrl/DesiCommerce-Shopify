@@ -182,3 +182,57 @@ Done and approved by the user (2026-10-03):
 - Templates:
   - page.pdrn-sandbox.json and index.json are identical (md5 ecf883a4…).
   - product.ice-globes.json is md5 9492703c….
+
+## Round 26 — product video as gallery slide 8 (2026-10-17)
+- Sync: on 2026-10-15 the user edited FAQ f8 directly in Shopify, adding "The soft silicone grip slides off, so both the grip and the globe are easy to wash and keep clean.".
+  - Pulled into the repo: templates/index.json (replaced the skeleton version), templates/page.pdrn-sandbox.json and templates/product.ice-globes.json.
+  - md5s: index = sandbox = 3f16b171…, ice-globes = 67562607….
+  - The repo still has no sections/hero-banner.liquid; theme code lives in Shopify.
+- Video: gid://shopify/Video/75630844379461, added 2026-10-17 13:14 UTC, 15 s. Shopify reports it as 1920×1080 (landscape 16:9, NOT 9:16). Media alt is empty.
+- hero-banner.liquid (md5 a635692d…):
+  - The video ID is appended to cv_gallery_order as item 8.
+  - gallery_video prefers that ID; the video thumb is rendered at its position in the order list (old "always last" thumb kept only as a fallback for a video not in the list).
+  - The main video uses video_tag with muted, loop, playsinline, no controls and preload none. The poster is Shopify's preview image (via video_tag).
+  - JS plays the video (muted) only when its thumb is clicked; the existing code pauses it on any image thumb.
+  - CSS: video object-fit: contain on a transparent background (frame bg #F3F6F6 = cream-deep).
+  - The thumb alt is "ELSORA ice globes — short video".
+- Facts found: the hero has no swipe on the main image (mobile swipe = horizontally scrolling thumb strip) and no variant→image switching (variant cards change price, button and ?variant= only).
+- Not visually verified (storefront and preview not reachable from the session).
+
+## Round 27 — vertical video for slide 8 (2026-10-17)
+- The user replaced the video on the product: new gid://shopify/Video/75631715811653 ("ELSORA AD 1 MUST.mp4", 1080×1920 portrait, 15.2 s). The old 16:9 video 75630844379461 was deleted.
+- hero-banner.liquid (md5 334f68e3…):
+  - All 3 references to the old ID now use 75631715811653. It is still gallery item 8.
+  - Video thumbnail:
+    - It is the video itself (muted, autoplay, loop, playsinline, no ▶ icon), using the smallest mp4 source (SD 480p, 270×480), picked in Liquid from gallery_video.sources.
+    - Its `src` is set by JS only after window "load", and it is never paused.
+    - The thumb markup is captured once as cv_video_thumb_html and used both in the ordered loop and in the fallback.
+  - Main video: video_tag with controls: true (full standard controls), muted, loop, playsinline, preload none. It autoplays muted when thumb 8 is clicked.
+  - Image thumbs pause and hide the main video; the thumbnail loop keeps running.
+  - CSS: the main video uses object-fit contain, centered, on a transparent background (frame bg). The thumb video uses object-fit cover.
+- Note: the frame is 4:5 and the video 9:16, so with contain the video fills the full height and the left/right sides show the frame background (cream-deep #F3F6F6, not black).
+- Round 28 (video display fix, hero md5 4323e8c3…):
+  - Main video: a lazy `<img class="cv-gallery__video-fill">` (poster 600w) sits behind the video, using cover, blur(30px), brightness(0.85) and scale(1.15). The wrap has overflow hidden and an inherited radius.
+  - The video sits on top (z-index 1), contained, centered and transparent, with border, outline and box-shadow removed. Controls are unchanged (video_tag controls: true; element = full frame, so the controls bar spans the frame).
+  - Thumb 8: the same idea, with a fill img (poster 150w, blur 12px, brightness .85, scale 1.25) and the looping SD video on top, contained.
+  - Open question: the thin dark lines along the video's own edges in the user's screenshot may be part of the video file itself (they also run along the top edge). If they stay, they come from the file, not the CSS.
+- Round 29 (owner rejected the blurred bands, hero md5 1fb37b4a…):
+  - Both blurred poster fills were removed (markup and CSS).
+  - Main video and thumb 8 video: width/height 100%, object-fit cover, object-position center center, transform scale(1.03) inside overflow:hidden containers (wrap: overflow hidden + inherited radius; thumb button already overflow hidden + radius). This hides the dark lines on the file's own edges; top and bottom are slightly cropped.
+  - Controls, muted/loop autoplay and the SD-480p lazy thumb loop are unchanged.
+  - Side effect: the native controls bar is scaled 1.03 as well, so about 1.5% of its left and right ends is clipped by the frame.
+- Round 30 (final video layout, hero md5 8137ac54…):
+  - Main frame: the class cv-hero__media--video sets aspect-ratio 9/16 (same width, taller) while slide 8 is active. JS adds the class on the video thumb and removes it on any image thumb, so the normal 4:5 ratio returns.
+  - Video: object-fit cover, center, scale(1.01) (max, to hide the file's edge lines; I can't see the preview to confirm whether they show).
+  - Thumb 8: static poster img (150w, cover/center) plus a small round white ▶ badge in the bottom-right corner. The thumbnail video, its SD source lookup and its lazy-load JS were removed.
+  - Note: alignGalleryBottom (desktop) is not re-run on the ratio change, so the taller frame grows downward.
+- Round 31 (back to the normal frame, hero md5 be1e6151…):
+  - The 9:16 frame switch was removed completely (class, JS and CSS). The video slide keeps the 4:5 frame, so the page doesn't grow or move.
+  - Main video: object-fit cover, object-position 50% 100% (anchored to the bottom, so only the top is cropped and the captions stay), scale(1.01) kept.
+  - Thumb 8 is unchanged (static poster + play badge).
+- Round 32 (video #8 hidden until a 4:5 version exists, hero md5 ac5d338e…):
+  - 75631715811653 was removed from cv_gallery_order, so the gallery shows the 7 approved images again.
+  - New guard: gallery_video is set to nil unless its ID is in cv_gallery_ids. The video thumb capture is wrapped in `if gallery_video`.
+  - All video-support code stays, so a future 4:5 video only needs its ID added back.
+  - The video stays in the product media.
+- Repo now holds a full backup of theme 205328908613 (428 files, md5-verified against Shopify). The 17 leftover skeleton files (blocks/*, skeleton sections/snippets, assets/critical.css, shoppy-x-ray.svg) were deleted.

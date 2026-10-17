@@ -1,0 +1,147 @@
+{%- comment -%}
+  ELSORA background finish (TEST, easy to turn off). Theme settings > "ELSORA
+  background finish": "Background grain" (+ intensity 0-6 %) and "Satin sheen".
+
+  Only on the PDRN sandbox page, the home page (index, round 18), the
+  product.ice-globes template and /cart.
+  It defines CSS variables with extra background layers; the sections add
+  them in front of their own background (var(--elsora-finish-wave) on the
+  wave backgrounds, var(--elsora-finish-flat) on the mint / white ones). They
+  are background layers of the section itself, so they can never cover
+  images, text, buttons, cards, prices or the cart drawer.
+  - grain: tiny tiled SVG noise (feTurbulence, 160 px tile), blended with
+    soft-light, opacity = the intensity setting.
+  - sheen: very soft diagonal white light (7 %), wave backgrounds only.
+  Off (or other pages): the variables are not set and every section falls
+  back to exactly its old background.
+
+  SATIN DEPTH (round 17, settings "Satin depth" + "Satin intensity" 0-100 %):
+  an SVG filter (#elsoraSatinDepth) on the wave-ribbon groups only (hero,
+  difference-grid, how-to-steps, elsora-wave-bg = cart + mobile menu). Same
+  wave shapes/positions; no new colours (white + #0A3A46, both already in the
+  ribbon gradients). Per ribbon: soft white light on the upper edge -> deeper
+  tone on the lower edge, plus a very soft shadow under each band so the
+  bands read as layered satin. Strength follows each ribbon's own opacity.
+  Round 17b: the shadow is clipped to the band's own shape (feComposite
+  "in" m). The unclipped shadow (blur 3 + dy 4 user units, stretched about
+  2x vertically on mobile) spread below every band and made the bands look
+  thicker/zoomed. Every filter layer now stays inside the original band
+  edges, so the wave size is exactly as before round 17.
+  The filter <svg> must be in <body>, so theme.liquid renders this snippet a
+  second time with part: 'svg' right after <body>; the CSS stays in <head>.
+{%- endcomment -%}
+{%- liquid
+  assign f_on = false
+  if template.suffix == 'pdrn-sandbox' or template.suffix == 'ice-globes' or template.name == 'index' or template.name == 'cart'
+    assign f_on = true
+  endif
+  assign f_grain = false
+  if settings.elsora_bg_grain and settings.elsora_bg_grain_intensity > 0
+    assign f_grain = true
+  endif
+  assign f_sheen = settings.elsora_bg_sheen
+  assign f_satin = false
+  if settings.elsora_bg_satin_depth and settings.elsora_bg_satin_intensity > 0
+    assign f_satin = true
+  endif
+-%}
+{%- if part == 'svg' -%}
+  {%- if f_on and f_satin -%}
+    {%- liquid
+      assign s_k = settings.elsora_bg_satin_intensity | divided_by: 100.0
+      assign s_light = s_k | times: 0.6
+      assign s_deep = s_k | times: 0.18
+      assign s_shadow = s_k | times: 0.22
+    -%}
+    <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+      <filter id="elsoraSatinDepth" x="-2%" y="-2%" width="104%" height="106%" color-interpolation-filters="sRGB">
+        <feComponentTransfer in="SourceAlpha" result="m"><feFuncA type="linear" slope="4"/></feComponentTransfer>
+        <feGaussianBlur in="m" stdDeviation="3" result="sb"/>
+        <feOffset in="sb" dy="4" result="so"/>
+        <feFlood flood-color="#0A3A46" flood-opacity="{{ s_shadow }}"/>
+        <feComposite in2="so" operator="in" result="shadowfull"/>
+        <feComposite in="shadowfull" in2="m" operator="in" result="shadow"/>
+        <feOffset in="m" dy="7" result="down"/>
+        <feComposite in="m" in2="down" operator="out" result="top"/>
+        <feGaussianBlur in="top" stdDeviation="2.5" result="topb"/>
+        <feComposite in="topb" in2="m" operator="in" result="topm"/>
+        <feFlood flood-color="#FFFFFF" flood-opacity="{{ s_light }}"/>
+        <feComposite in2="topm" operator="in" result="light"/>
+        <feOffset in="m" dy="-7" result="up"/>
+        <feComposite in="m" in2="up" operator="out" result="bot"/>
+        <feGaussianBlur in="bot" stdDeviation="2.5" result="botb"/>
+        <feComposite in="botb" in2="m" operator="in" result="botm"/>
+        <feFlood flood-color="#0A3A46" flood-opacity="{{ s_deep }}"/>
+        <feComposite in2="botm" operator="in" result="deep"/>
+        <feMerge>
+          <feMergeNode in="shadow"/>
+          <feMergeNode in="SourceGraphic"/>
+          <feMergeNode in="deep"/>
+          <feMergeNode in="light"/>
+        </feMerge>
+      </filter>
+    </svg>
+  {%- endif -%}
+{%- else -%}
+{%- if f_on and f_satin -%}
+  <style>
+    .elsora-wave-lines > g,
+    .elsora-wave-bg__lines > g,
+    [class*="cv-diff-wave-lines-"] > g,
+    [class*="cv-howto-wave-lines-"] > g {
+      filter: url(#elsoraSatinDepth);
+    }
+  </style>
+{%- endif -%}
+{%- if f_on and f_grain or f_on and f_sheen -%}
+  {%- liquid
+    assign f_opacity = settings.elsora_bg_grain_intensity | divided_by: 100.0
+    capture f_grain_img
+      echo 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27g%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix type=%27saturate%27 values=%270%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23g)%27 opacity=%27'
+      echo f_opacity
+      echo '%27/%3E%3C/svg%3E")'
+    endcapture
+    assign f_sheen_img = 'linear-gradient(115deg, rgba(255,255,255,0) 18%, rgba(255,255,255,0.07) 46%, rgba(255,255,255,0) 74%)'
+
+    assign wave_img = ''
+    assign wave_size = ''
+    assign wave_repeat = ''
+    assign wave_blend = ''
+    if f_grain
+      assign wave_img = f_grain_img | append: ', '
+      assign wave_size = '160px 160px, '
+      assign wave_repeat = 'repeat, '
+      assign wave_blend = 'soft-light, '
+    endif
+    if f_sheen
+      assign wave_img = wave_img | append: f_sheen_img | append: ', '
+      assign wave_size = wave_size | append: '100% 100%, '
+      assign wave_repeat = wave_repeat | append: 'no-repeat, '
+      assign wave_blend = wave_blend | append: 'normal, '
+    endif
+    assign wave_img = wave_img | remove_last: ', '
+  -%}
+  <style>
+    :root {
+      --elsora-finish-wave: {{ wave_img }};
+      --elsora-finish-wave-size: {{ wave_size }}auto;
+      --elsora-finish-wave-repeat: {{ wave_repeat }}repeat;
+      --elsora-finish-wave-blend: {{ wave_blend }}normal;
+      {%- if f_grain %}
+      --elsora-finish-flat: {{ f_grain_img }};
+      --elsora-finish-flat-size: 160px 160px, auto;
+      --elsora-finish-flat-repeat: repeat, repeat;
+      --elsora-finish-flat-blend: soft-light, normal;
+      {%- endif %}
+    }
+    {%- if f_grain %}
+    body.gradient {
+      background-image: {{ f_grain_img }};
+      background-size: 160px 160px;
+      background-repeat: repeat;
+      background-blend-mode: soft-light;
+    }
+    {%- endif %}
+  </style>
+{%- endif -%}
+{%- endif -%}

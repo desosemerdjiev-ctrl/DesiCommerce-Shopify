@@ -8,14 +8,44 @@
  * ------------------------------------------------------------
  */
 {
+  "name": "t:sections.footer.name",
   "type": "footer",
-  "name": "t:general.footer",
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "text_mVN3pX": {
+          "type": "text",
+          "settings": {
+            "heading": "Contact Us",
+            "subtext": "<p>Need help with your order?<br/><br/>Email: support@elsora.store<br/><br/>Customer support replies within 24 business hours.</p>"
+          }
+        },
+        "link_list_akXTke": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "text_mVN3pX",
+        "link_list_akXTke"
+      ],
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "color_scheme": "scheme-1",
+        "newsletter_enable": true,
+        "newsletter_heading": "Join the ELSORA Community",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": false,
+        "margin_top": 0,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     }
   },

@@ -1,0 +1,76 @@
+{% assign sid = section.id %}
+
+<div class="cv-gallery-{{ sid }}">
+  <div class="cv-gallery__grid-{{ sid }}">
+    {% for block in section.blocks %}
+      {% if block.type == 'image' %}
+        <div class="cv-gallery__item-{{ sid }}" {{ block.shopify_attributes }}>
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | image_url: width: 800 }}"
+                 srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 800 }} 800w"
+                 sizes="(max-width: 900px) 100vw, 33vw"
+                 alt="{{ block.settings.image.alt | escape }}"
+                 loading="lazy"
+                 width="{{ block.settings.image.width }}"
+                 height="{{ block.settings.image.height }}">
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% style %}
+  .cv-gallery-{{ sid }} {
+    --cv-radius: var(--elsora-radius);
+    max-width: var(--elsora-container-max);
+    margin: 0 auto;
+    padding: 64px 32px;
+    box-sizing: border-box;
+  }
+  .cv-gallery-{{ sid }} *, .cv-gallery-{{ sid }} *::before, .cv-gallery-{{ sid }} *::after { box-sizing: border-box; }
+  .cv-gallery-{{ sid }} img { max-width: 100%; display: block; }
+
+  @media (max-width: 760px) { .cv-gallery-{{ sid }} { padding: 48px 20px; } }
+
+  .cv-gallery__grid-{{ sid }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  @media (max-width: 760px) {
+    .cv-gallery__grid-{{ sid }} { grid-template-columns: 1fr; }
+  }
+
+  .cv-gallery__item-{{ sid }} img {
+    border-radius: var(--cv-radius);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    width: 100%;
+    box-shadow: var(--elsora-shadow-image);
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "CV Gallery",
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Gallery image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CV Gallery",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

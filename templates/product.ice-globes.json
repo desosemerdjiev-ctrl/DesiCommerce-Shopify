@@ -1,0 +1,405 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_banner_sandbox": {
+      "type": "hero-banner",
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "text": "Visibly de-puffs tired eyes"
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "text": "Awakens and refreshes skin"
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "text": "Cools and calms in seconds"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3"
+      ],
+      "name": "Ice Globes Hero",
+      "settings": {
+        "badge_text": "Stainless Steel",
+        "eyebrow": "304 Stainless Steel Ice Globes for Face & Neck",
+        "headline": "5 minutes every morning. Visibly less puffy.",
+        "subheadline": "Premium stainless steel ice globes that cool, refresh and de-puff — a spa-style ritual at home.",
+        "fallback_cta_text": "Shop now",
+        "fallback_link": "#",
+        "guarantee_text": "30-day money-back guarantee — love it or get a full refund",
+        "shipping_title_1": "Free U.S. shipping",
+        "shipping_desc_1": "On all orders, no minimum",
+        "shipping_title_2": "Tracked delivery",
+        "shipping_desc_2": "Full tracking from dispatch to door",
+        "shipping_title_3": "Ships in 1–3 days",
+        "shipping_desc_3": "Fast processing — then 5–8 business days to your door",
+        "trust_item_1": "Cooling care",
+        "trust_item_2": "Stainless steel",
+        "trust_item_3": "Reusable every day"
+      }
+    },
+    "wave_1": {
+      "type": "elsora-wave-divider",
+      "name": "Wave — Proof to Problem (quiet open)",
+      "settings": {
+        "height": 150,
+        "height_mobile": 80,
+        "speed": 11,
+        "reverse_direction": false,
+        "show_third_layer": true,
+        "layer_1_opacity": 75,
+        "layer_2_opacity": 65,
+        "layer_3_opacity": 50
+      }
+    },
+    "bridge_line_sandbox": {
+      "type": "bridge-line",
+      "name": "Ice Globes Bridge",
+      "settings": {
+        "line": "Cold enough to wake you up. Gentle enough for every morning."
+      }
+    },
+    "proof_strip_sandbox": {
+      "type": "proof-strip",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "number": "5 min",
+            "label": "morning ritual"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "number": "304",
+            "label": "stainless steel"
+          }
+        },
+        "stat_4": {
+          "type": "stat",
+          "settings": {
+            "number": "30",
+            "label": "day money‑back guarantee"
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_4"
+      ],
+      "name": "Ice Globes Proof Strip",
+      "settings": {}
+    },
+    "lifestyle_row_sandbox": {
+      "type": "lifestyle-row",
+      "blocks": {
+        "p1": {
+          "type": "paragraph",
+          "settings": {
+            "text": "You wake up and the first thing you see is a puffy, tired face. Under-eye bags. Redness. A face that looks like it needs three coffees before it looks like you."
+          }
+        },
+        "p2": {
+          "type": "paragraph",
+          "settings": {
+            "text": "This is what screens, stress and sleep do to your skin. Traditional skincare sits on the surface — it can't cool, de-puff or wake up tired-looking skin. That takes cold."
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2"
+      ],
+      "name": "The Morning Problem",
+      "settings": {
+        "image": "shopify://shop_images/ChatGPT_Image_Sep_12_2026_02_45_49_PM.png",
+        "reverse": false,
+        "label": "The problem",
+        "headline": "Your face tells the whole story of last night."
+      }
+    },
+    "difference_grid_sandbox": {
+      "type": "difference-grid",
+      "blocks": {
+        "i1": {
+          "type": "item",
+          "settings": {
+            "title": "Morning de-puff",
+            "text": "A cool glide under the eyes and across the cheeks helps your face look less puffy and more awake — in about five minutes."
+          }
+        },
+        "i2": {
+          "type": "item",
+          "settings": {
+            "title": "A sculpted look",
+            "text": "Roll upward along the jawline and cheekbones for a massage that leaves your face looking refreshed and more defined."
+          }
+        },
+        "i3": {
+          "type": "item",
+          "settings": {
+            "title": "Fresh, awake glow",
+            "text": "The cool touch wakes up tired-looking skin and leaves a fresh, dewy look that carries you through your day."
+          }
+        },
+        "i4": {
+          "type": "item",
+          "settings": {
+            "title": "Free storage case",
+            "text": "Keep both globes together and ready for your next cooling ritual."
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4"
+      ],
+      "name": "Ice Globes Benefits",
+      "settings": {
+        "label": "Why it works",
+        "headline": "Cold is the most underused tool in skincare.",
+        "subtext": "Chill, roll, re-chill — durable 304 stainless steel, no glass to crack."
+      }
+    },
+    "wave_2": {
+      "type": "elsora-wave-divider",
+      "name": "Wave — Benefits to How-To (signature moment)",
+      "settings": {
+        "height": 150,
+        "height_mobile": 80,
+        "speed": 11,
+        "reverse_direction": true,
+        "show_third_layer": true,
+        "layer_1_opacity": 75,
+        "layer_2_opacity": 65,
+        "layer_3_opacity": 50
+      }
+    },
+    "how_to_steps_sandbox": {
+      "type": "how-to-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_18_2026_01_39_00_PM.png",
+            "title": "Clean the globes and put them in the case."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_18_2026_01_39_19_PM.png",
+            "title": "Chill in the fridge or freezer for 3–4 hours — or simply keep them in overnight."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_18_2026_01_45_17_PM.png",
+            "title": "Clean your face and apply oil, cream or serum."
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_18_2026_01_49_23_PM.png",
+            "title": "Roll upward from the chin toward the cheeks."
+          }
+        },
+        "s5": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_18_2026_02_03_58_PM.png",
+            "title": "Roll outward across the forehead, then gently around the eyes."
+          }
+        },
+        "s6": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_18_2026_02_08_31_PM.png",
+            "title": "Massage upward along the neck."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6"
+      ],
+      "name": "How To Use",
+      "settings": {
+        "label": "The ritual",
+        "headline": "Freeze. Roll. Glow."
+      }
+    },
+    "reviews_grid_sandbox": {
+      "type": "reviews-grid",
+      "name": "Ice Globes Lifestyle Grid",
+      "settings": {
+        "headline": "Ways to use it",
+        "subheading": "Illustrative images.",
+        "guarantee_title": "30-day money-back guarantee",
+        "guarantee_subtext": "Love it or get a full refund.",
+        "image_1": "shopify://shop_images/image-1790764702564.webp",
+        "caption_1": "Morning reset",
+        "image_2": "shopify://shop_images/image-1790764713781.webp",
+        "caption_2": "Straight from the freezer",
+        "image_3": "shopify://shop_images/image-1790764724568.webp",
+        "caption_3": "A ritual to share",
+        "image_4": "shopify://shop_images/image-1790764733203.webp",
+        "caption_4": "A moment just for you",
+        "image_5": "shopify://shop_images/image-1790764743662.webp",
+        "caption_5": "Evening wind-down",
+        "image_6": "shopify://shop_images/image-1790764751182.webp",
+        "caption_6": "Post-shave cool down",
+        "promise_title_1": "Free case with every order",
+        "promise_text_1": "Holds both globes, clean and ready.",
+        "promise_title_2": "Cold or warm",
+        "promise_text_2": "One tool, two rituals.",
+        "promise_title_3": "No batteries, no charging",
+        "promise_text_3": "Stainless steel, made to last.",
+        "bottom_line": "New from ELSORA — be among the first to share your ritual.",
+        "review_promise_line": "Every review on this page comes from a verified customer. We never write, buy or edit reviews."
+      }
+    },
+    "faq_accordion_sandbox": {
+      "type": "faq-accordion",
+      "blocks": {
+        "f1": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I use the ice globes?",
+            "answer": "Chill in the fridge or freezer for 3–4 hours — or simply keep them in overnight. Apply your usual serum or moisturizer, then roll the globes in gentle upward and outward circular motions across your face and neck for about 5 minutes. Use morning or evening. For a warm ritual, place them in warm (not boiling) water for a few minutes. Never microwave or heat directly."
+          }
+        },
+        "f2": {
+          "type": "faq",
+          "settings": {
+            "question": "Why stainless steel instead of glass?",
+            "answer": "No glass to crack, so it's more durable for daily use and travel. Made from durable, easy-to-clean 304 stainless steel with a soft silicone grip."
+          }
+        },
+        "f3": {
+          "type": "faq",
+          "settings": {
+            "question": "How long do they stay cold?",
+            "answer": "Long enough for a relaxed 5-minute ritual. For a longer session, simply pop them back in the fridge or freezer for a few minutes and continue."
+          }
+        },
+        "f4": {
+          "type": "faq",
+          "settings": {
+            "question": "Are they safe for sensitive skin?",
+            "answer": "The cool touch feels gentle on most skin. If you have sensitive skin or a skin condition, patch-test first or ask your dermatologist."
+          }
+        },
+        "f5": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I use them around my eyes?",
+            "answer": "Yes. Many people love the cool feel under the eyes. The cool glide helps the under-eye area look less puffy and more awake. Keep pressure light and movements gentle around the orbital bone."
+          }
+        },
+        "f6": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "Not happy within 30 days of delivery? Email us and we'll give you a full refund.\n\nTo request a refund, please contact:\n\nsupport@elsora.store"
+          }
+        },
+        "f7": {
+          "type": "faq",
+          "settings": {
+            "question": "Why are there no reviews yet?",
+            "answer": "ELSORA is a newly launched brand, and we only show reviews from real customers, collected after their order arrives. We'd rather show none than show fake ones. Try it risk-free: if you don't love it, our 30-day money-back guarantee has you covered.",
+            "hide_when_reviews_exist": true
+          }
+        },
+        "f8": {
+          "type": "faq",
+          "settings": {
+            "question": "What's inside the globes?",
+            "answer": "Each globe is made of 304 stainless steel with a sealed cooling liquid inside. It's fully sealed — nothing to refill. The soft silicone grip slides off, so both the grip and the globe are easy to wash and keep clean."
+          }
+        }
+      },
+      "block_order": [
+        "f1",
+        "f2",
+        "f4",
+        "f5",
+        "f6",
+        "f3",
+        "f8",
+        "f7"
+      ],
+      "name": "Ice Globes FAQ",
+      "settings": {
+        "label": "Questions",
+        "headline": "Everything you need to know."
+      }
+    },
+    "wave_3": {
+      "type": "elsora-wave-divider",
+      "name": "Wave — FAQ to Final CTA (closing transition)",
+      "settings": {
+        "height": 150,
+        "height_mobile": 80,
+        "speed": 11,
+        "reverse_direction": false,
+        "show_third_layer": true,
+        "layer_1_opacity": 75,
+        "layer_2_opacity": 65,
+        "layer_3_opacity": 50
+      }
+    },
+    "final_cta_sandbox": {
+      "type": "final-cta",
+      "name": "Ice Globes Final CTA",
+      "settings": {
+        "headline": "Start your morning ritual today.",
+        "fallback_cta_text": "Shop now",
+        "fallback_link": "#"
+      }
+    }
+  },
+  "order": [
+    "hero_banner_sandbox",
+    "wave_1",
+    "bridge_line_sandbox",
+    "proof_strip_sandbox",
+    "lifestyle_row_sandbox",
+    "difference_grid_sandbox",
+    "wave_2",
+    "how_to_steps_sandbox",
+    "reviews_grid_sandbox",
+    "faq_accordion_sandbox",
+    "wave_3",
+    "final_cta_sandbox"
+  ]
+}

@@ -1,0 +1,51 @@
+{% assign sid = section.id %}
+
+<div class="cv-bridge-{{ sid }}">
+ 
+  <p>{{ section.settings.line }}</p>
+</div>
+
+{% style %}
+  .cv-bridge-{{ sid }} {
+    --cv-cream: var(--elsora-cream);
+    --cv-bridge-accent: var(--elsora-bridge-accent);
+    --cv-bridge-accent-deep: var(--elsora-bridge-accent-deep);
+
+    max-width: var(--elsora-container-max);
+    margin: 0 auto;
+    padding: 70px 32px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .cv-bridge-{{ sid }} * { box-sizing: border-box; }
+
+  @media (max-width: 760px) {
+    .cv-bridge-{{ sid }} { padding: 48px 20px; }
+  }
+
+  .cv-bridge-{{ sid }} p {
+    font-family: var(--elsora-font-display);
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(22px, 3vw, 32px);
+    color: #706FCB;
+    max-width: 720px;
+    margin: 22px auto 0;
+    line-height: 1.35;
+  }
+
+  .cv-mist-{{ sid }} { display: flex; gap: 6px; align-items: center; justify-content: center; }
+  .cv-mist-{{ sid }} span { width: 4px; height: 4px; border-radius: 50%; background: var(--cv-bridge-accent); opacity: .55; }
+  .cv-mist-{{ sid }} span:nth-child(2n) { opacity: .3; }
+  .cv-mist-{{ sid }} span:nth-child(3n) { opacity: .8; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "CV Bridge Line",
+  "settings": [
+    { "type": "text", "id": "line", "label": "Bridge line", "default": "Gentle enough for sensitive skin. Strong enough to actually work." }
+  ],
+  "presets": [{ "name": "CV Bridge Line" }]
+}
+{% endschema %}

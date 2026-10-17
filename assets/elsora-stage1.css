@@ -1,0 +1,199 @@
+/*
+  ELSORA STAGE 1 — Visual Corrections
+  Ice Globes product adaptation
+  Draft theme only — does not affect live Storebuild theme
+*/
+
+/* ============================================================
+   1. HEADER: transparent at top → solid cream on scroll
+   Logo must remain visible in BOTH states.
+   ============================================================ */
+
+/* Reset any box-shadow added by previous header edits */
+.section-header .header-wrapper {
+  background-color: rgba(251, 244, 239, 0.0);
+  transition:
+    background-color 0.4s ease,
+    box-shadow 0.4s ease,
+    backdrop-filter 0.4s ease;
+  box-shadow: none !important;
+}
+
+/* When sticky header is active (scrolled past top) → solid cream */
+.shopify-section-header-sticky .header-wrapper {
+  background-color: rgba(251, 244, 239, 0.97) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(46, 32, 36, 0.08) !important;
+}
+
+/* Logo and nav links: always ELSORA plum — never white, never invisible */
+.section-header .header__heading-link,
+.section-header .header__heading-link:hover,
+.section-header .header .h2,
+.section-header .header__icon,
+.section-header .header__icon:hover,
+.section-header .list-menu__item--link,
+.section-header .list-menu__item--link:hover {
+  color: var(--elsora-plum, #2E2024) !important;
+  opacity: 1 !important;
+}
+
+/* Cart icon — icy-blue crystal accent for Ice Globes product */
+.section-header .header__icon--cart svg,
+.section-header #cart-icon-bubble svg {
+  color: var(--elsora-accent, #9B6FD9);
+}
+
+/* Mobile: always solid — transparent only on desktop desktop */
+@media screen and (max-width: 749px) {
+  .section-header .header-wrapper {
+    background-color: rgba(251, 244, 239, 0.97) !important;
+    box-shadow: 0 2px 8px rgba(46, 32, 36, 0.06) !important;
+  }
+}
+
+/* ============================================================
+   2. HERO SECTION: full-bleed, no white gaps
+   ============================================================ */
+
+/* Hero banner — remove any page-width container constraints */
+.shopify-section:first-of-type .cv-v2,
+.shopify-section:first-of-type .hero-banner,
+.shopify-section:first-of-type [class*='hero'] {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Ensure hero image is full-bleed */
+.cv-v2__main {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.cv-v2-main-image {
+  width: 100% !important;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Hero banner section wrapper: no white gaps */
+.shopify-section:has(.hero-banner) {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* ============================================================
+   3. WAVE TRANSITIONS — no white gaps adjacent to waves
+   Sections adjacent to wave dividers must use cream/rose tones
+   ============================================================ */
+
+/* Sections immediately before/after wave dividers */
+.shopify-section:has(.elsora-wave),
+.shopify-section:has([class*='wave']) {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* Bridge line section */
+.shopify-section:has(.bridge-line),
+[class*='bridge'] {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* Proof strip section */
+.shopify-section:has(.proof-strip) {
+  background-color: var(--elsora-cream-deep, #F3E7DD);
+}
+
+/* Lifestyle row — problem section */
+.shopify-section:has(.lifestyle-row) {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* Difference grid — benefits section */
+.shopify-section:has(.difference-grid) {
+  background-color: var(--elsora-tint, #EDE3F7);
+}
+
+/* How-to steps section */
+.shopify-section:has(.how-to-steps) {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* Reviews section */
+.shopify-section:has(.reviews-grid) {
+  background-color: var(--elsora-cream-deep, #F3E7DD);
+}
+
+/* FAQ section */
+.shopify-section:has(.faq-accordion) {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* Final CTA */
+.shopify-section:has(.final-cta) {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* Eliminate random white backgrounds on all sections */
+.shopify-section {
+  background-color: var(--elsora-cream, #FBF4EF);
+}
+
+/* page body background */
+body {
+  background-color: var(--elsora-cream, #FBF4EF) !important;
+}
+
+/* ============================================================
+   4. TYPOGRAPHY — premium/editorial direction
+   Fraunces for display, Inter for body (both loaded)
+   ============================================================ */
+
+.cv-v2__headline,
+[class*='hero'] h1,
+[class*='hero'] h2,
+.hero-banner h1,
+.hero-banner h2,
+.bridge-line__text,
+.lifestyle-row__headline,
+.difference-grid__headline,
+.how-to-steps__headline,
+.reviews-grid__headline,
+.faq-accordion__headline,
+.final-cta__headline {
+  font-family: var(--elsora-font-display, 'Fraunces', serif) !important;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Body text — Inter */
+body,
+.shopify-section p,
+.shopify-section span,
+.shopify-section li {
+  font-family: var(--elsora-font-body, 'Inter', sans-serif);
+}
+
+/* ============================================================
+   5. CTA BUTTON — ELSORA accent color (lavender/purple)
+   ============================================================ */
+
+.btn--primary,
+.button--primary,
+[class*='cta'] .button,
+[class*='cta'] a[class*='btn'],
+[class*='cta'] button {
+  background-color: var(--elsora-cta, #9B7CF6) !important;
+  border-color: var(--elsora-cta, #9B7CF6) !important;
+  color: #ffffff !important;
+}
+
+.btn--primary:hover,
+.button--primary:hover {
+  background-color: var(--elsora-accent, #9B6FD9) !important;
+}

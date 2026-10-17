@@ -1,0 +1,127 @@
+{% comment %}
+  ELSORA WAVE DIVIDER — reusable, product-agnostic editorial motion divider.
+
+  v4 (true seamless loop fix):
+  v3 claimed seamless tiling but the motif's start/end y-values did not
+  actually match at the x=1200 seam (e.g. y=150 at x=0 vs y=95 at x=1200) —
+  translating by exactly one motif-width therefore still produced a visible
+  vertical jump every loop. v4 redraws each layer as a single large
+  two-segment asymmetric arc whose start and end y-value are IDENTICAL
+  (e.g. 140→140), so the 1200→2400 repeat lines up with the 0→1200 motif
+  with zero discontinuity — a genuinely seamless loop, not just a
+  mathematically-intended one.
+
+  Fewer, larger control points per motif (2 cubic segments instead of 3)
+  produce the "large asymmetric arc" ribbon look instead of small repeating
+  ripples.
+
+  A CSS mask fades the container to transparent at both the top ~12% and
+  bottom ~22%, so there is no hard rectangular edge where the divider meets
+  the section above/below — the neighboring section's own background
+  shows through the fade, so the wave never reads as an inserted box.
+
+  Colors come entirely from --elsora-wave-1/2/3 tokens (dedicated wave-only
+  slots in snippets/elsora-design-tokens.liquid, kept separate from the
+  shared --elsora-cream-deep/--elsora-tint/--elsora-rose tokens so a
+  wave-only color correction never ripples into the hero background,
+  shipping cards, or any other component that reads those shared tokens).
+  Fill-only paint, no stroke — a stroke was tried once and reverted because
+  it read as hard/sharp contours rather than the intended soft masked
+  blend; do not reintroduce a stroke on these layers. No path geometry,
+  size, position, animation, or timing changed from v4.
+{% endcomment %}
+{% assign sid = section.id %}
+{% assign wd_speed = section.settings.speed | default: 13 %}
+
+<div class="elsora-wave-{{ sid }}" aria-hidden="true">
+  <svg class="elsora-wave__layer-{{ sid }} elsora-wave__layer-1-{{ sid }}" viewBox="0 0 2400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,140 C260,190 480,60 700,110 C900,155 1020,70 1200,140 C1460,190 1680,60 1900,110 C2100,155 2220,70 2400,140 L2400,200 L0,200 Z"></path>
+  </svg>
+  <svg class="elsora-wave__layer-{{ sid }} elsora-wave__layer-2-{{ sid }}" viewBox="0 0 2400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,100 C240,40 460,170 700,110 C920,55 1060,150 1200,100 C1440,40 1660,170 1900,110 C2120,55 2260,150 2400,100 L2400,200 L0,200 Z"></path>
+  </svg>
+  {% if section.settings.show_third_layer %}
+    <svg class="elsora-wave__layer-{{ sid }} elsora-wave__layer-3-{{ sid }}" viewBox="0 0 2400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,165 C220,130 400,195 620,170 C840,145 980,190 1200,165 C1420,130 1600,195 1820,170 C2040,145 2180,190 2400,165 L2400,200 L0,200 Z"></path>
+    </svg>
+  {% endif %}
+</div>
+
+{% style %}
+  .elsora-wave-{{ sid }} {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.height | default: 110 }}px;
+    overflow: hidden;
+    background: transparent;
+    margin-top: -40px;
+    margin-bottom: -30px;
+    line-height: 0;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 72%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 72%, transparent 100%);
+  }
+  @media (max-width: 760px) {
+    .elsora-wave-{{ sid }} {
+      height: {{ section.settings.height_mobile | default: 55 }}px;
+      margin-top: -22px;
+      margin-bottom: -16px;
+    }
+  }
+
+  .elsora-wave__layer-{{ sid }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    will-change: transform;
+  }
+
+  .elsora-wave__layer-1-{{ sid }} {
+    fill: var(--elsora-wave-1);
+    opacity: {{ section.settings.layer_1_opacity | default: 60 | divided_by: 100.0 }};
+    animation: elsora-wave-drift-{{ sid }} {{ wd_speed }}s linear infinite;
+    {% if section.settings.reverse_direction %}animation-direction: reverse;{% endif %}
+  }
+  .elsora-wave__layer-2-{{ sid }} {
+    fill: var(--elsora-wave-2);
+    opacity: {{ section.settings.layer_2_opacity | default: 50 | divided_by: 100.0 }};
+    animation: elsora-wave-drift-{{ sid }} {{ wd_speed | times: 0.7 }}s linear infinite;
+    {% unless section.settings.reverse_direction %}animation-direction: reverse;{% endunless %}
+  }
+  .elsora-wave__layer-3-{{ sid }} {
+    fill: var(--elsora-wave-3);
+    opacity: {{ section.settings.layer_3_opacity | default: 30 | divided_by: 100.0 }};
+    animation: elsora-wave-drift-{{ sid }} {{ wd_speed | times: 1.3 }}s linear infinite;
+    {% if section.settings.reverse_direction %}animation-direction: reverse;{% endif %}
+  }
+
+  @keyframes elsora-wave-drift-{{ sid }} {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .elsora-wave__layer-{{ sid }} {
+      animation: none !important;
+      transform: translateX(-15%) !important;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "ELSORA Wave Divider",
+  "settings": [
+    { "type": "range", "id": "height", "label": "Desktop height (px)", "min": 30, "max": 220, "step": 5, "default": 110 },
+    { "type": "range", "id": "height_mobile", "label": "Mobile height (px)", "min": 20, "max": 130, "step": 5, "default": 55 },
+    { "type": "range", "id": "speed", "label": "Animation speed (seconds per loop, base layer)", "min": 6, "max": 60, "step": 1, "default": 13, "info": "Higher = slower. Other layers run at 0.7x / 1.3x of this value automatically." },
+    { "type": "checkbox", "id": "reverse_direction", "label": "Reverse layer direction", "default": false },
+    { "type": "checkbox", "id": "show_third_layer", "label": "Show third (accent) layer", "default": true },
+    { "type": "range", "id": "layer_1_opacity", "label": "Layer 1 opacity (%)", "min": 0, "max": 100, "step": 5, "default": 60 },
+    { "type": "range", "id": "layer_2_opacity", "label": "Layer 2 opacity (%)", "min": 0, "max": 100, "step": 5, "default": 50 },
+    { "type": "range", "id": "layer_3_opacity", "label": "Layer 3 (accent) opacity (%)", "min": 0, "max": 100, "step": 5, "default": 30 }
+  ],
+  "presets": [{ "name": "ELSORA Wave Divider" }]
+}
+{% endschema %}

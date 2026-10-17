@@ -1,0 +1,12 @@
+{%- comment -%}
+  ELSORA: returns the Content > Files filename of the photo that matches a
+  cart line's variant, or nothing for any other variant/product.
+  Silver Pair -> elsora-ref-silver-pair.webp, Gold Pair -> elsora-ref-gold-pair.webp.
+  The callers look the file up with images[filename] and fall back to their
+  own default image when this outputs nothing.
+  Used by sections/main-cart-items.liquid and snippets/cart-drawer.liquid (captured, then stripped).
+{%- endcomment -%}
+{%- case item.variant.id -%}
+  {%- when 59209490235717 -%}elsora-ref-silver-pair.webp
+  {%- when 59209490268485 -%}elsora-ref-gold-pair.webp
+{%- endcase -%}
